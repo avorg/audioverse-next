@@ -21,7 +21,7 @@ export async function getStaticProps({
 	params,
 }: GetStaticPropsArgs): Promise<StaticProps> {
 	const language = _.get(params, 'language'),
-		langKey = _.findKey(LANGUAGES, (l) => l.base_url === language);
+		langKey = _.findKey(LANGUAGES, (l) => l.code === language);
 
 	if (!langKey) throw Error('Missing or invalid language');
 
@@ -36,7 +36,7 @@ export async function getStaticProps({
 
 export async function getStaticPaths(): Promise<StaticPaths> {
 	return {
-		paths: Object.values(LANGUAGES).map((l) => `/${l.base_url}`),
+		paths: Object.values(LANGUAGES).map((l) => `/${l.code}`),
 		fallback: 'unstable_blocking',
 	};
 }

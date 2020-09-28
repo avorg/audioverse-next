@@ -38,7 +38,7 @@ export async function getStaticPaths(): Promise<StaticPaths> {
 				filteredNodes = nodes.filter(
 					(n) => new Date(n.recordingDate) > dateFloor
 				),
-				baseUrl = LANGUAGES[l].base_url;
+				baseUrl = LANGUAGES[l].code;
 
 			return (
 				filteredNodes.map((node) => `/${baseUrl}/sermons/${node.id}`) || []

@@ -10,7 +10,7 @@ async function makeNumberedPaths(
 			const entryCount = await getCount(k),
 				pageCount = Math.ceil(entryCount / ENTRIES_PER_PAGE),
 				numbers = Array.from(Array(pageCount).keys()),
-				base = LANGUAGES[k].base_url;
+				base = LANGUAGES[k].code;
 
 			return numbers.map((x) => `/${base}/${sectionSegments}/${x + 1}`);
 		}),
@@ -59,7 +59,7 @@ export async function getPaginatedStaticProps<T extends IGetterResolved>(
 	pageIndex: number,
 	getter: Getter<T>
 ): Promise<PaginatedStaticProps> {
-	const langKey = _.findKey(LANGUAGES, (l) => l.base_url === language),
+	const langKey = _.findKey(LANGUAGES, (l) => l.code === language),
 		offset = (pageIndex - 1) * ENTRIES_PER_PAGE;
 
 	if (!langKey) throw Error('Missing or invalid language');

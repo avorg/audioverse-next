@@ -1,11 +1,13 @@
+import _ from 'lodash';
+
 export const ENTRIES_PER_PAGE = 25;
 
-export const LANGUAGES: { [key: string]: { base_url: string } } = {
-	ENGLISH: { base_url: 'en' },
-	SPANISH: { base_url: 'es' },
-	FRENCH: { base_url: 'fr' },
-	GERMAN: { base_url: 'de' },
-	CHINESE: { base_url: 'zh' },
-	JAPANESE: { base_url: 'ja' },
-	RUSSIAN: { base_url: 'ru' },
+export const LANGUAGES: { [key: string]: { code: string } } = {
+	ENGLISH: { code: 'en' },
+	SPANISH: { code: 'es' },
+	FRENCH: { code: 'fr' },
+	GERMAN: { code: 'de' },
+	CHINESE: { code: 'zh' },
+	JAPANESE: { code: 'ja' },
+	RUSSIAN: { code: 'ru' },
 };
