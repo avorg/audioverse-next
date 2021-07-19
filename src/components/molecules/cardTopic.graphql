@@ -6,4 +6,5 @@ fragment cardTopic on Recording {
 	}
 	# TODO: viewerProgress
 	# TODO: viewerHasFavorited
+	...cardPlayable
 }

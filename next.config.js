@@ -36,7 +36,7 @@ module.exports = withPWA({
 
 		return config;
 	},
-	// future: {
-	// 	webpack5: true,
-	// },
+	images: {
+		domains: ['ik.imagekit.io'],
+	},
 });

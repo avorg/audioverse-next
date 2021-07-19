@@ -2,7 +2,7 @@ import React from 'react';
 
 import Card from '@components/molecules/card';
 import { CardPostFragment } from '@lib/generated/graphql';
-import useFormattedDuration from '@lib/useFormattedDuration';
+import { useFormattedDuration } from '@lib/time';
 
 interface CardPostProps {
 	post: CardPostFragment;

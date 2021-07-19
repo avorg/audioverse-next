@@ -1,0 +1,9 @@
+.base {
+	margin-bottom: 1rem;
+}
+
+.open {
+	svg {
+		transform: scaleY(-1);
+	}
+}

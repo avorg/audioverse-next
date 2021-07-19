@@ -1,0 +1,15 @@
+@import '../../styles/common';
+
+.button {
+	border: none;
+	background: none;
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: 700;
+	color: $ts-midTone;
+	padding-left: 4px;
+	padding-right: 4px;
+	&[aria-pressed='true'] {
+		color: $ts-red;
+	}
+}

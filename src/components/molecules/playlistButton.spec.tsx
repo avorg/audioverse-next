@@ -7,6 +7,7 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { when } from 'jest-when';
+import React from 'react';
 
 import PlaylistButton from '@components/molecules/playlistButton';
 import { setPlaylistMembership } from '@lib/api/setPlaylistMembership';
@@ -36,7 +37,9 @@ const renderComponent = async ({
 }: {
 	recordingId?: string;
 } = {}) => {
-	const result = await renderWithIntl(PlaylistButton, { recordingId });
+	const result = await renderWithIntl(
+		<PlaylistButton recordingId={recordingId} />
+	);
 	const container = result.container as HTMLElement;
 
 	const getEntry = (playlistTitle: string) =>

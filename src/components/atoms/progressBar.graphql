@@ -1,0 +1,4 @@
+fragment progressBar on Recording {
+	id
+	...andMiniplayer
+}

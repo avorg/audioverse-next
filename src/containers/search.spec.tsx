@@ -1,11 +1,12 @@
+import React from 'react';
+
 import { loadQuery, renderWithIntl } from '@lib/test/helpers';
 import Search, {
 	getStaticPaths,
 	getStaticProps,
 } from '@pages/[language]/search';
-
 const renderPage = async () => {
-	return renderWithIntl(Search, { sermons: [] });
+	return renderWithIntl(<Search sermons={[]} />);
 };
 
 describe('search', () => {

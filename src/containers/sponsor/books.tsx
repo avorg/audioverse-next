@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -20,7 +22,7 @@ function SponsorBooks({ nodes, data, pagination }: Props): JSX.Element {
 	return (
 		<>
 			{sponsorImage && (
-				<img
+				<Image
 					alt={data?.sponsor?.title}
 					src={sponsorImage}
 					width={100}
@@ -28,9 +30,9 @@ function SponsorBooks({ nodes, data, pagination }: Props): JSX.Element {
 				/>
 			)}
 			<h1>
-				<a href={makeSponsorRoute(languageRoute, data?.sponsor?.id || '')}>
-					{data?.sponsor?.title}
-				</a>
+				<Link href={makeSponsorRoute(languageRoute, data?.sponsor?.id || '')}>
+					<a>{data?.sponsor?.title}</a>
+				</Link>
 			</h1>
 			<h2>
 				<FormattedMessage

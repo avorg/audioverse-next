@@ -23,6 +23,7 @@ module.exports = {
 		'plugin:prettier/recommended',
 		'plugin:testing-library/recommended',
 		'plugin:jest-dom/recommended',
+		'plugin:@next/next/recommended',
 	],
 	root: true,
 	env: {

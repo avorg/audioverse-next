@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import withFailStates from '@components/HOCs/withFailStates';
@@ -23,7 +24,9 @@ function Version({ books }: VersionProps): JSX.Element {
 			<ul>
 				{books.map((b) => (
 					<li key={b.id}>
-						<a href={makeBibleBookRoute(languageRoute, b.id)}>{b.title}</a>
+						<Link href={makeBibleBookRoute(languageRoute, b.id)}>
+							<a>{b.title}</a>
+						</Link>
 					</li>
 				))}
 			</ul>

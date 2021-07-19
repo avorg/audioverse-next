@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -25,16 +27,18 @@ function ConferenceList({ nodes, pagination }: Props): JSX.Element {
 			<ul>
 				{nodes.map((n) => (
 					<li key={n.id}>
-						<a href={makeConferenceRoute(languageRoute, n.id, 1)}>
-							<img
-								src={n.imageWithFallback?.url}
-								alt={n.title}
-								width={100}
-								height={100}
-							/>
-							<span>{n.title}</span>
-							<span>{n.sponsor?.title}</span>
-						</a>
+						<Link href={makeConferenceRoute(languageRoute, n.id, 1)}>
+							<a>
+								<Image
+									src={n.imageWithFallback?.url}
+									alt={n.title}
+									width={100}
+									height={100}
+								/>
+								<span>{n.title}</span>
+								<span>{n.sponsor?.title}</span>
+							</a>
+						</Link>
 					</li>
 				))}
 			</ul>

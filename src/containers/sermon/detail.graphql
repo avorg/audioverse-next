@@ -1,14 +1,6 @@
 query getSermonDetailData($id: ID!) {
 	sermon(id: $id) {
 		...recording
-		sequence {
-			title
-			recordings {
-				nodes {
-					...recordingList
-				}
-			}
-		}
 	}
 }
 

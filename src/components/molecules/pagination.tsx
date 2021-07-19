@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import useLanguageRoute from '@lib/useLanguageRoute';
@@ -48,7 +49,9 @@ const PaginationEntry = ({
 			data-testid={isActive ? 'active' : ''}
 		>
 			{Number.isInteger(page) && makeRoute ? (
-				<a href={makeRoute(languageRoute, +page)}>{label || page}</a>
+				<Link href={makeRoute(languageRoute, +page)}>
+					<a>{label || page}</a>
+				</Link>
 			) : (
 				label || page
 			)}

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 import Pagination from '@components/molecules/pagination';
@@ -35,7 +36,7 @@ export default function PaginatedList<T extends Listable>({
 	return (
 		<>
 			{pageImage && (
-				<img src={pageImage} alt={pageTitle} width={100} height={100} />
+				<Image src={pageImage} alt={pageTitle} width={100} height={100} />
 			)}
 			<h1>{pageTitle}</h1>
 			{children}

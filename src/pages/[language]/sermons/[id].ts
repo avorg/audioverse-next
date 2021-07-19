@@ -15,21 +15,20 @@ export async function getStaticProps({
 	params: { id: string };
 }): Promise<StaticProps<SermonDetailProps>> {
 	const { id } = params;
-	// TODO: try/catch errors to ensure proper 404 page is displayed
 	const { sermon } = await getSermonDetailData({ id }).catch(() => ({
-		sermon: undefined,
+		sermon: null,
 	}));
 
 	return {
 		props: {
 			sermon,
+			title: sermon?.title || null,
 		},
 		revalidate: REVALIDATE,
 	};
 }
 
 export async function getStaticPaths(): Promise<StaticPaths> {
-	// TODO: extract route generation
 	return getDetailStaticPaths(
 		getSermonDetailStaticPaths,
 		(d) => d.sermons.nodes,

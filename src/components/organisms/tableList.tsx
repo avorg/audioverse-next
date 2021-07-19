@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 import useLanguageRoute from '@lib/useLanguageRoute';
@@ -43,13 +45,22 @@ export default function TableList<T extends Listable>({
 						<tr key={n.id}>
 							<td>
 								{imageSrc && (
-									<a href={route}>
-										<img src={imageSrc} alt={title} width={100} height={100} />
-									</a>
+									<Link href={route}>
+										<a>
+											<Image
+												src={imageSrc}
+												alt={title}
+												width={100}
+												height={100}
+											/>
+										</a>
+									</Link>
 								)}
 							</td>
 							<td>
-								<a href={route}>{title}</a>
+								<Link href={route}>
+									<a>{title}</a>
+								</Link>
 							</td>
 							{columns?.map(({ name, View }) => (
 								<td key={name}>

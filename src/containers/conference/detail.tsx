@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import withFailStates from '@components/HOCs/withFailStates';
@@ -26,9 +27,9 @@ function ConferenceDetail({
 				{data?.conference?.startDate} — {data?.conference?.endDate}
 			</p>
 			{sponsorId && (
-				<a href={makeSponsorRoute(languageRoute, sponsorId)}>
-					{data?.conference?.sponsor?.title}
-				</a>
+				<Link href={makeSponsorRoute(languageRoute, sponsorId)}>
+					<a>{data?.conference?.sponsor?.title}</a>
+				</Link>
 			)}
 			<RssLink href={rssPath} />
 			<RecordingList recordings={nodes} />

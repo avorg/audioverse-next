@@ -2,7 +2,6 @@ import fs from 'fs';
 import { dirname, resolve } from 'path';
 
 import { Feed } from 'feed';
-import _ from 'lodash';
 
 import { PROJECT_ROOT } from '@lib/constants';
 import { WriteFeedFileFragment } from '@lib/generated/graphql';
@@ -35,9 +34,14 @@ export default async function writeFeedFile({
 	});
 
 	recordings.map((r) => {
-		const file = _.get(r, 'audioFiles[0]') || _.get(r, 'videoFiles[0]');
-		const url = _.get(file, 'url');
-		const length = _.get(file, 'filesize');
+		const { audioFiles = [], feedVideoFiles = [] } = r;
+		const files = [...audioFiles, ...feedVideoFiles];
+		const file = files.length && files[0];
+
+		if (!file) return;
+
+		const url = file.url;
+		const length = parseInt(file.filesize);
 
 		if (!url) return;
 

@@ -2,6 +2,7 @@ import fs from 'fs';
 
 import * as feed from 'feed';
 import { when } from 'jest-when';
+import React from 'react';
 
 import { ENTRIES_PER_PAGE, PROJECT_ROOT } from '@lib/constants';
 import {
@@ -28,7 +29,7 @@ async function renderPage(parameters = {}) {
 
 	const { props } = await getStaticProps({ params });
 
-	return renderWithIntl(TagDetail, props);
+	return renderWithIntl(<TagDetail {...props} />);
 }
 
 function loadPageData() {

@@ -10,6 +10,7 @@ import { toast, ToastContainer } from 'react-toastify';
 
 import withIntl from '@components/HOCs/withIntl';
 import 'react-toastify/dist/ReactToastify.css';
+import AndMiniplayer from '@components/templates/andMiniplayer';
 import AndSidebar from '@components/templates/andSidebar';
 
 const queryClient = new QueryClient({
@@ -40,14 +41,14 @@ function MyApp<P>({
 	pageProps,
 }: {
 	Component: typeof React.Component;
-	pageProps: P & { disableSidebar?: boolean };
+	pageProps: P & { disableSidebar?: boolean; title?: string };
 }): JSX.Element {
-	const disableSidebar = pageProps.disableSidebar;
+	const { disableSidebar, title } = pageProps;
 	return (
 		<>
 			<React.StrictMode>
 				<Head>
-					<title>AudioVerse</title>
+					<title>{title ? `${title} | ` : ''}AudioVerse</title>
 				</Head>
 				<QueryClientProvider client={queryClient}>
 					<ThemeProvider theme={muiTheme}>
@@ -55,21 +56,17 @@ function MyApp<P>({
 							{disableSidebar ? (
 								<Component {...pageProps} />
 							) : (
-								<AndSidebar>
-									<Component {...pageProps} />
-								</AndSidebar>
+								<AndMiniplayer>
+									<AndSidebar>
+										<Component {...pageProps} />
+									</AndSidebar>
+								</AndMiniplayer>
 							)}
 						</Hydrate>
 					</ThemeProvider>
 				</QueryClientProvider>
 			</React.StrictMode>
 			<ToastContainer />
-			{/* Go to www.addthis.com/dashboard to customize your tools */}
-			<script
-				type="text/javascript"
-				src="//s7.addthis.com/js/300/addthis_widget.js#pubid=audioverse"
-				defer
-			/>
 		</>
 	);
 }

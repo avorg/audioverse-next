@@ -1,0 +1,11 @@
+@import '../../styles/common';
+
+.button {
+	flex: 0 0 auto;
+	background: none;
+	border: none;
+	color: $ts-red;
+	svg {
+		font-size: var(--size, 32px);
+	}
+}

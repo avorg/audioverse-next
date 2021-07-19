@@ -1,0 +1,3 @@
+fragment buttonPlay on Recording {
+	...andMiniplayer
+}

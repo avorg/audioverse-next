@@ -1,0 +1,73 @@
+@import '../../styles/common';
+
+.base {
+	border-radius: 24px;
+	overflow: hidden;
+	border: 1px solid $ts-cream;
+}
+
+.hat {
+	background-color: $ts-cream;
+	padding: 16px 24px;
+	display: block;
+	text-decoration: none;
+	.hatType {
+		font-size: 10px;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-weight: 700;
+		display: flex;
+		align-items: center;
+		svg {
+			margin-right: 4px;
+			color: $ts-red;
+		}
+	}
+	h4 {
+		margin: 0;
+		font-size: 16px;
+	}
+}
+
+.content {
+	display: flex;
+	> * {
+		padding: 24px;
+	}
+	h1 {
+		margin-top: 0;
+		margin-bottom: 0.5rem;
+		font-weight: 700;
+		font-size: 44px;
+	}
+}
+
+.series {
+	border-left: 1px solid $ts-cream;
+}
+
+.part {
+	color: $ts-red;
+	font-weight: 600;
+	font-size: 16px;
+}
+
+.speakers {
+	padding-left: 0;
+	margin-top: 0;
+	li {
+		display: inline-block;
+		margin-right: 1rem;
+	}
+}
+
+.sequenceNav {
+	overflow: hidden;
+	margin-bottom: 1rem;
+	.previous {
+		float: left;
+	}
+	.next {
+		float: right;
+	}
+}

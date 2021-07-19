@@ -1,0 +1,12 @@
+fragment buttonDownload on Recording {
+	videoDownloads: videoFiles(allowedContainers: MP4) {
+		id
+		url
+		filesize
+	}
+	audioDownloads: audioFiles(allowedContainers: MP3) {
+		id
+		url
+		filesize
+	}
+}

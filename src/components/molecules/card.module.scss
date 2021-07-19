@@ -14,7 +14,7 @@
 
 .hat {
 	background-color: var(--hatBg, #efebeb);
-	color: var(--hatColor, #323e48);
+	color: var(--hatColor, $ts-dark);
 	padding: 16px;
 	width: 100%;
 	font-size: 0.9em;
@@ -58,7 +58,7 @@
 .heading {
 	display: flex;
 	justify-content: space-between;
-	color: var(--headingColor, #323e48);
+	color: var(--headingColor, $ts-dark);
 
 	h1 {
 		font-size: 1.5em;
@@ -71,7 +71,8 @@
 	}
 
 	path {
-		stroke: var(--headingColor, #323e48);
+		stroke: var(--headingColor, $ts-dark);
+		fill: none;
 	}
 }
 
@@ -91,20 +92,6 @@
 
 .duration {
 	flex: 0 0 auto;
-}
-
-.progress {
-	border-bottom: 1px solid #cdd9e3;
-	flex: 1 1 100%;
-	margin-left: 1em;
-	margin-right: 1em;
-
-	span {
-		margin-bottom: -1px;
-		display: block;
-		border-bottom: 1px solid var(--progressColor, #ff224a);
-		width: var(--progress, 0);
-	}
 }
 
 .chapter {

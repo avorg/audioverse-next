@@ -5,7 +5,7 @@ import SpeakerName from '@components/molecules/speakerName';
 import TableList from '@components/organisms/tableList';
 import { RecordingListFragment } from '@lib/generated/graphql';
 import { makeSermonRoute } from '@lib/routes';
-import useFormattedDuration from '@lib/useFormattedDuration';
+import { useFormattedDuration } from '@lib/time';
 
 const columns = [
 	{

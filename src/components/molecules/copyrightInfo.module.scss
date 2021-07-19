@@ -1,0 +1,7 @@
+.image {
+	// TODO: This feels like it entirely defeats the purpose of requiring
+	//   that image elements have both width and height attributes. Is there
+	//   any way we can know the real height ahead of time? Or do we need to
+	//   just give up on the rule?
+	height: auto;
+}

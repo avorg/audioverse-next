@@ -131,7 +131,7 @@ describe('writeFeedFile', () => {
 			link: 'the_url',
 			enclosure: {
 				url: 'file_url',
-				length: '3',
+				length: 3,
 			},
 		});
 	});

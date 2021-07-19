@@ -1,6 +1,7 @@
+import React from 'react';
+
 import Footer from '@components/organisms/footer';
 import { renderWithIntl } from '@lib/test/helpers';
-
 describe('footer', () => {
 	it('has site links', async () => {
 		const links = [
@@ -33,7 +34,7 @@ describe('footer', () => {
 			'Русский',
 		];
 
-		const { getByRole } = await renderWithIntl(Footer, {});
+		const { getByRole } = await renderWithIntl(<Footer />);
 
 		links.map((name) => {
 			expect(getByRole('link', { name })).toBeInTheDocument();
@@ -41,7 +42,7 @@ describe('footer', () => {
 	});
 
 	it('has iOS link', async () => {
-		const { getByAltText } = await renderWithIntl(Footer, {});
+		const { getByAltText } = await renderWithIntl(<Footer />);
 
 		const img = getByAltText('iOS App');
 		const link = img.parentElement as HTMLLinkElement;
@@ -50,7 +51,7 @@ describe('footer', () => {
 	});
 
 	it('has Android link', async () => {
-		const { getByAltText } = await renderWithIntl(Footer, {});
+		const { getByAltText } = await renderWithIntl(<Footer />);
 
 		const img = getByAltText('Android App');
 		const link = img.parentElement as HTMLLinkElement;

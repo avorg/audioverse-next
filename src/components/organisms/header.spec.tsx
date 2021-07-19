@@ -1,10 +1,11 @@
+import React from 'react';
+
 import Header from '@components/organisms/header';
 import { renderWithIntl } from '@lib/test/helpers';
-
 jest.mock('@lib/api/fetchApi');
 
 const renderHeader = async () => {
-	return renderWithIntl(Header, {});
+	return renderWithIntl(<Header />);
 };
 
 describe('header', () => {

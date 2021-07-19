@@ -1,4 +1,5 @@
 import { when } from 'jest-when';
+import React from 'react';
 
 import { ENTRIES_PER_PAGE } from '@lib/constants';
 import {
@@ -20,7 +21,7 @@ async function renderPage(params: Partial<GetStaticPropsArgs['params']> = {}) {
 		params: { language: 'en', i: '1', ...params },
 	});
 
-	return renderWithIntl(Audiobooks, props);
+	return renderWithIntl(<Audiobooks {...props} />);
 }
 
 function loadData(data: Partial<GetAudiobookListPageDataQuery> = {}) {

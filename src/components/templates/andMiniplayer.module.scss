@@ -1,0 +1,21 @@
+@import '../../styles/common';
+
+.base {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	overflow: hidden;
+}
+
+.content {
+	flex: 1 1 0;
+	min-height: 0;
+	display: flex;
+}
+
+.videoOrigin,
+.videoOrigin * {
+	visibility: hidden !important;
+	height: 0;
+}

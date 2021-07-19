@@ -1,0 +1,3 @@
+fragment playbackTimes on Recording {
+	...andMiniplayer
+}

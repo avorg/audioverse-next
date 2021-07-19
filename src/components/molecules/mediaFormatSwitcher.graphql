@@ -1,0 +1,3 @@
+fragment mediaFormatSwitcher on Recording {
+	...andMiniplayer
+}

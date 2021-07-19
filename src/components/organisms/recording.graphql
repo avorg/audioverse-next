@@ -4,21 +4,6 @@ fragment recording on Recording {
 	persons {
 		...speakerName
 	}
-	audioFiles {
-		url
-		filesize
-		mimeType
-	}
-	videoFiles(allowedContainers: [M4A, M4V, MOV, MP4]) {
-		url
-		filesize
-		mimeType
-	}
-	videoStreams: videoFiles(allowedContainers: [M3U8_WEB]) {
-		url
-		filesize
-		mimeType
-	}
 	videoDownloads: videoFiles(allowedContainers: MP4) {
 		id
 		url
@@ -48,10 +33,18 @@ fragment recording on Recording {
 	sequence {
 		id
 		title
+		recordings(first: 1000) {
+			nodes {
+				id
+				...teaseRecording
+			}
+		}
 	}
+	sequenceIndex
 	transcript {
 		text
 	}
 	shareUrl
 	...copyrightInfo
+	...player
 }

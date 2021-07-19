@@ -1,6 +1,7 @@
 import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { when } from 'jest-when';
+import React from 'react';
 
 import Login from '@components/molecules/login';
 import { LoginForgotPasswordDocument } from '@lib/generated/graphql';
@@ -26,7 +27,7 @@ function loadForgotPasswordResponse({
 
 describe('login form', () => {
 	it('renders forgot password link', async () => {
-		const { getByText } = await renderWithIntl(Login, {});
+		const { getByText } = await renderWithIntl(<Login />);
 
 		expect(getByText('forgot password'));
 	});
@@ -34,7 +35,7 @@ describe('login form', () => {
 	it('triggers forgot password email', async () => {
 		loadForgotPasswordResponse();
 
-		const { getByText, getByPlaceholderText } = await renderWithIntl(Login, {});
+		const { getByText, getByPlaceholderText } = await renderWithIntl(<Login />);
 
 		userEvent.type(getByPlaceholderText('email'), 'the_email');
 		userEvent.click(getByText('forgot password'));
@@ -51,7 +52,7 @@ describe('login form', () => {
 	it('shows forgot password success message', async () => {
 		loadForgotPasswordResponse();
 
-		const { getByText, getByPlaceholderText } = await renderWithIntl(Login, {});
+		const { getByText, getByPlaceholderText } = await renderWithIntl(<Login />);
 
 		userEvent.type(getByPlaceholderText('email'), 'the_email');
 		userEvent.click(getByText('forgot password'));
@@ -67,7 +68,7 @@ describe('login form', () => {
 			errors: [{ message: 'the_error' }],
 		});
 
-		const { getByText, getByPlaceholderText } = await renderWithIntl(Login, {});
+		const { getByText, getByPlaceholderText } = await renderWithIntl(<Login />);
 
 		userEvent.type(getByPlaceholderText('email'), 'the_email');
 		userEvent.click(getByText('forgot password'));
@@ -87,7 +88,7 @@ describe('login form', () => {
 			getByText,
 			getByPlaceholderText,
 			queryByText,
-		} = await renderWithIntl(Login, {});
+		} = await renderWithIntl(<Login />);
 
 		userEvent.type(getByPlaceholderText('email'), 'the_email');
 		userEvent.click(getByText('forgot password'));
@@ -108,8 +109,7 @@ describe('login form', () => {
 				.mockRejectedValue('oops');
 
 			const { getByText, getByPlaceholderText } = await renderWithIntl(
-				Login,
-				{}
+				<Login />
 			);
 
 			userEvent.type(getByPlaceholderText('email'), 'the_email');
@@ -131,7 +131,7 @@ describe('login form', () => {
 			errors: [{ message: 'error_one' }, { message: 'error_two' }],
 		});
 
-		const { getByText, getByPlaceholderText } = await renderWithIntl(Login, {});
+		const { getByText, getByPlaceholderText } = await renderWithIntl(<Login />);
 
 		userEvent.type(getByPlaceholderText('email'), 'the_email');
 		userEvent.click(getByText('forgot password'));

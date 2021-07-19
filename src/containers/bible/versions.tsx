@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import withFailStates from '@components/HOCs/withFailStates';
@@ -21,7 +22,9 @@ function Versions({ versions }: VersionsProps): JSX.Element {
 			<ul>
 				{versions.map((v) => (
 					<li key={v.id}>
-						<a href={makeBibleVersionRoute(languageRoute, v.id)}>{v.title}</a>
+						<Link href={makeBibleVersionRoute(languageRoute, v.id)}>
+							<a>{v.title}</a>
+						</Link>
 					</li>
 				))}
 			</ul>

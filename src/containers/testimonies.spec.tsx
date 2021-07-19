@@ -1,4 +1,5 @@
 import { when } from 'jest-when';
+import React from 'react';
 
 import { ENTRIES_PER_PAGE } from '@lib/constants';
 import {
@@ -47,7 +48,7 @@ async function renderPage() {
 	const params = { i: '1', language: 'en' };
 	const { props } = await getStaticProps({ params });
 
-	return renderWithIntl(Testimonies, props);
+	return renderWithIntl(<Testimonies {...props} />);
 }
 
 describe('testimonies pages', () => {
@@ -159,19 +160,21 @@ describe('testimonies pages', () => {
 	});
 
 	it('does not error if no nodes', async () => {
-		await renderWithIntl(Testimonies, {
+		const _p = {
 			nodes: undefined,
 			pagination: {
 				current: 1,
 				total: 1,
 			},
-		} as any);
+		} as any;
+		await renderWithIntl(<Testimonies {..._p} />);
 	});
 
 	it('does not error if no pagination', async () => {
-		await renderWithIntl(Testimonies, {
+		const _p = {
 			nodes: undefined,
 			pagination: undefined,
-		} as any);
+		} as any;
+		await renderWithIntl(<Testimonies {..._p} />);
 	});
 });

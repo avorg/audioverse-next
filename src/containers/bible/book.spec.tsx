@@ -1,12 +1,15 @@
 import userEvent from '@testing-library/user-event';
 import { when } from 'jest-when';
+import React from 'react';
 import videojs from 'video.js';
 
+import AndMiniplayer from '@components/templates/andMiniplayer';
+import { BookProps } from '@containers/bible/book';
 import {
 	GetBibleBookDetailPageDataDocument,
 	GetBibleBookDetailPathsDataDocument,
 } from '@lib/generated/graphql';
-import { mockedFetchApi, renderWithIntl } from '@lib/test/helpers';
+import { buildStaticRenderer, mockedFetchApi } from '@lib/test/helpers';
 import Book, {
 	getStaticPaths,
 	getStaticProps,
@@ -14,12 +17,20 @@ import Book, {
 
 jest.mock('video.js');
 
-async function renderPage() {
-	const { props } = await getStaticProps({
-		params: { id: 'the_version_id', book: 'the_book_shortname' },
-	});
-	return renderWithIntl(Book, props);
-}
+const renderPage = buildStaticRenderer(
+	(props: BookProps) => {
+		return (
+			<AndMiniplayer>
+				<Book {...props} />
+			</AndMiniplayer>
+		);
+	},
+	getStaticProps,
+	{
+		id: 'the_version_id',
+		book: 'the_book_shortname',
+	}
+);
 
 function loadPageData() {
 	when(mockedFetchApi)
@@ -203,7 +214,9 @@ describe('Bible book detail page', () => {
 	it('includes player', async () => {
 		loadPageData();
 
-		await renderPage();
+		const { getByLabelText } = await renderPage();
+
+		userEvent.click(getByLabelText('play'));
 
 		expect(videojs).toBeCalled();
 	});

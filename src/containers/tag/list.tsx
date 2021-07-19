@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -32,7 +33,9 @@ function TagList({ pagination, nodes }: TagListProps): JSX.Element {
 				{nodes &&
 					nodes.map((t) => (
 						<li key={t.id}>
-							<a href={makeTagDetailRoute(languageRoute, t.name)}>{t.name}</a>
+							<Link href={makeTagDetailRoute(languageRoute, t.name)}>
+								<a>{t.name}</a>
+							</Link>
 						</li>
 					))}
 			</ul>

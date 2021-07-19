@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import React, { useContext, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { PlaybackContext } from '@components/templates/andMiniplayer';
 import { PlaylistFragment } from '@lib/generated/graphql';
 import { readableBytes } from '@lib/readableBytes';
 
@@ -17,6 +19,7 @@ export default function Playlist<R>({
 	recordings = [],
 	initial,
 }: PlaylistProps<R>): JSX.Element {
+	const playback = useContext(PlaybackContext);
 	const getInitialId = () => {
 		const ids = recordings.map((r) => r.id);
 		return initial && ids.includes(initial) ? initial : recordings[0]?.id;
@@ -46,16 +49,20 @@ export default function Playlist<R>({
 					<ul>
 						{recordings.map((r) => (
 							<li key={r.id}>
-								<button onClick={() => setId(r.id)}>{r.title}</button>
+								<button
+									onClick={() => {
+										setId(r.id);
+										playback.loadRecording(r);
+									}}
+								>
+									{r.title}
+								</button>
 								{r.audioDownloads?.map((d) => (
-									<a
-										key={d.url}
-										href={d.url}
-										target={'_blank'}
-										rel={'noreferrer noopener'}
-									>
-										{readableBytes(d.filesize)}
-									</a>
+									<Link key={d.url} href={d.url}>
+										<a target={'_blank'} rel={'noreferrer noopener'}>
+											{readableBytes(d.filesize)}
+										</a>
+									</Link>
 								))}
 							</li>
 						))}

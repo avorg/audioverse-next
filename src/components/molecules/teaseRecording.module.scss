@@ -1,0 +1,12 @@
+@import '../../styles/common';
+
+.base {
+	path {
+		stroke: $ts-dark;
+		fill: none;
+	}
+}
+
+.title {
+	font-size: 22px;
+}

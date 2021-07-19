@@ -2,16 +2,18 @@
 
 .base {
 	display: flex;
-	min-height: 100vh;
+	align-items: stretch;
+	flex-grow: 1;
 }
 
 .header {
 	flex: 0 0 200px;
-	border-right: 0.5px solid $gray-bleached;
 	display: flex;
+	overflow: scroll;
 }
 
 .content {
 	flex: 0 0 calc(100% - 200px);
 	padding: 2rem;
+	overflow: scroll;
 }

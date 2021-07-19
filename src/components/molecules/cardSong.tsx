@@ -19,9 +19,12 @@ export default function CardSong({ song }: CardSongProps): JSX.Element {
 
 	return (
 		<CardPlayable
+			recording={song}
 			container={container}
 			theme={'song'}
 			progress={0.3}
+			// TODO: Generate URL
+			url={'#'}
 			{...song}
 		/>
 	);

@@ -12,7 +12,7 @@ async function renderComponent({
 } = {}): Promise<RenderResult> {
 	loadQuery({ language });
 
-	return renderWithIntl(RecordingList, {
+	const _p = {
 		recordings: [
 			{
 				id: 'the_recording_id',
@@ -25,7 +25,8 @@ async function renderComponent({
 				...sermonData,
 			} as any,
 		],
-	});
+	};
+	return renderWithIntl(<RecordingList {..._p} />);
 }
 
 describe('recording list', () => {

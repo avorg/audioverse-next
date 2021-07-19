@@ -5,8 +5,8 @@ import * as intl from 'react-intl';
 import { FormattedMessage } from 'react-intl';
 import { toast } from 'react-toastify';
 
+import ButtonFavorite from '@components/molecules/buttonFavorite';
 import CardPlayable from '@components/molecules/cardPlayable';
-import Favorite from '@components/molecules/favorite';
 import Login from '@components/molecules/login';
 import PlaylistButton from '@components/molecules/playlistButton';
 import SpeakerName from '@components/molecules/speakerName';
@@ -48,7 +48,7 @@ import {
 	mockedFetchApi,
 	renderWithQueryProvider,
 } from '@lib/test/helpers';
-import useFormattedDuration from '@lib/useFormattedDuration';
+import { useFormattedDuration } from '@lib/time';
 import Logout from '@pages/[language]/account/logout';
 
 jest.mock('react-intl');
@@ -56,7 +56,7 @@ jest.mock('@lib/api/isRecordingFavorited');
 jest.mock('@lib/api/isPersonFavorited');
 jest.mock('react-toastify');
 jest.mock('@lib/readableBytes');
-jest.mock('@lib/useFormattedDuration');
+jest.mock('@lib/time');
 jest.mock('@lib/api/logout');
 
 const expectNoUnlocalizedText = (
@@ -192,6 +192,7 @@ describe('localization usage', () => {
 						],
 					} as Sermon
 				}
+				title={null}
 			/>
 		);
 
@@ -202,7 +203,7 @@ describe('localization usage', () => {
 		jest.spyOn(api, 'isRecordingFavorited').mockResolvedValue(true);
 
 		const screen = await renderWithQueryProvider(
-			<Favorite id={'recording_id'} />
+			<ButtonFavorite id={'recording_id'} />
 		);
 
 		await waitFor(() => expect(isRecordingFavorited).toBeCalled());

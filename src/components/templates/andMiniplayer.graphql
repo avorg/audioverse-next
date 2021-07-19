@@ -1,0 +1,23 @@
+fragment andMiniplayer on Recording {
+	id
+	title
+	duration
+	sequence {
+		title
+	}
+	audioFiles {
+		url
+		filesize
+		mimeType
+	}
+	videoFiles(allowedContainers: [M4A, M4V, MOV, MP4]) {
+		url
+		filesize
+		mimeType
+	}
+	videoStreams: videoFiles(allowedContainers: [M3U8_WEB]) {
+		url
+		filesize
+		mimeType
+	}
+}

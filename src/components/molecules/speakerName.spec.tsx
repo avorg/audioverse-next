@@ -1,5 +1,6 @@
 import { fireEvent, waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import { toast } from 'react-toastify';
 
 import SpeakerName from '@components/molecules/speakerName';
@@ -12,21 +13,21 @@ import {
 	resolveWithDelay,
 	withMutedReactQueryLogger,
 } from '@lib/test/helpers';
-
 jest.mock('react-toastify');
 jest.mock('@lib/api/setPersonFavorited');
 jest.mock('@lib/api/isPersonFavorited');
 jest.mock('@lib/api/fetchApi');
 
 const renderComponent = (speaker: any | undefined = undefined) => {
-	return renderWithIntl(SpeakerName, {
+	const _p = {
 		person:
 			speaker ||
 			({
 				id: 'the_id',
 				name: 'the_name',
 			} as any),
-	});
+	};
+	return renderWithIntl(<SpeakerName {..._p} />);
 };
 
 describe('speaker name component', () => {

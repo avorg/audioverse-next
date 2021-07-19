@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 // TODO: Ensure this page gets statically generated
@@ -10,6 +12,7 @@ export default function Give(): JSX.Element {
 			{/* WORKAROUND: https://stackoverflow.com/a/55322126/937377 */}
 			<script
 				src="https://donorbox.org/widget.js"
+				async={true}
 				{...{ paypalexpress: 'true' }}
 			/>
 			<iframe
@@ -30,24 +33,26 @@ export default function Give(): JSX.Element {
 
 			<p>
 				If you would like to donate using Apple Pay{' '}
-				<a href="https://donorbox.org/audioverse-give">
-					click here{' '}
-					<img
-						src="/img/Apple_Pay.svg"
-						alt="Apple Pay"
-						width={166}
-						height={106}
-					/>
-				</a>
+				<Link href="https://donorbox.org/audioverse-give">
+					<a>
+						click here{' '}
+						<Image
+							src="/img/Apple_Pay.svg"
+							alt="Apple Pay"
+							width={166}
+							height={106}
+						/>
+					</a>
+				</Link>
 			</p>
 
 			{/* TODO: Port old donation page or delete this link: */}
 			<p>
 				If for any reason you would like to give using the old donation page,
 				please{' '}
-				<a href="https://www.audioverse.org/english/about/17/donation.html">
-					click here
-				</a>
+				<Link href="https://www.audioverse.org/english/about/17/donation.html">
+					<a>click here</a>
+				</Link>
 			</p>
 
 			<p>
@@ -55,7 +60,7 @@ export default function Give(): JSX.Element {
 				system, please email us at: billing@audioverse.org
 			</p>
 
-			<img
+			<Image
 				src="/img/paypal.png"
 				alt="Paypal Giving Fund"
 				width={448}
@@ -69,7 +74,7 @@ export default function Give(): JSX.Element {
 				will receive a tax-deductible receipt from Paypal Giving Fund and not
 				from AudioVerse.
 			</p>
-			<img src="/img/mail.png" alt="Check by Mail" width={195} height={220} />
+			<Image src="/img/mail.png" alt="Check by Mail" width={195} height={220} />
 			<h2>Check by Mail</h2>
 			<p>Please make checks payable to AudioVerse.</p>
 
@@ -84,7 +89,7 @@ export default function Give(): JSX.Element {
 				<br />
 				USA
 			</address>
-			<img
+			<Image
 				src="/img/amazon-smile.png"
 				alt="Amazon Smile"
 				width={701}
@@ -101,7 +106,7 @@ export default function Give(): JSX.Element {
 				regular Amazon site.
 			</p>
 
-			<img
+			<Image
 				src="/img/giving-assistant.png"
 				alt="Giving Assistant"
 				width={700}
@@ -117,7 +122,7 @@ export default function Give(): JSX.Element {
 				Penney!
 			</p>
 
-			<img
+			<Image
 				src="/img/estate-planning-legacy.png"
 				alt="Estate Planning Legacy"
 				width={366}

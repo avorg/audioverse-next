@@ -1,0 +1,44 @@
+@import '../../styles/common';
+
+.progress {
+	$margin: 14px;
+	$visualHeight: var(--visualHeight, 2px);
+
+	display: grid;
+	grid-template-areas: 'cell';
+
+	&:before {
+		grid-area: cell;
+		content: '';
+		display: block;
+		background-color: var(--barColor, $ts-lightTone);
+		height: $visualHeight;
+		margin-top: $margin;
+		margin-bottom: $margin;
+	}
+
+	&:after {
+		grid-area: cell;
+		content: '';
+		display: block;
+		background-color: var(--progressColor, $ts-red);
+		height: $visualHeight;
+		width: var(--progress, 0%);
+		position: relative;
+		z-index: 10;
+		margin-top: $margin;
+		margin-bottom: $margin;
+	}
+
+	input {
+		grid-area: cell;
+		margin: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 100;
+		opacity: 0;
+		&:enabled {
+			cursor: pointer;
+		}
+	}
+}

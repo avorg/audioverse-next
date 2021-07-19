@@ -1,4 +1,5 @@
 import { when } from 'jest-when';
+import React from 'react';
 
 import { GetBibleVersionsPageDataDocument } from '@lib/generated/graphql';
 import { mockedFetchApi, renderWithIntl } from '@lib/test/helpers';
@@ -9,7 +10,7 @@ import Versions, {
 
 async function renderPage() {
 	const { props } = await getStaticProps();
-	return renderWithIntl(Versions, props);
+	return renderWithIntl(<Versions {...props} />);
 }
 
 function loadPageData() {

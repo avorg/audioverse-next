@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -23,12 +25,12 @@ function SponsorTeachings({
 	return (
 		<>
 			{img && (
-				<img alt={data?.sponsor?.title} src={img} width={100} height={100} />
+				<Image alt={data?.sponsor?.title} src={img} width={100} height={100} />
 			)}
 			<h1>
-				<a href={makeSponsorRoute(languageRoute, data?.sponsor?.id || '')}>
-					{data?.sponsor?.title}
-				</a>
+				<Link href={makeSponsorRoute(languageRoute, data?.sponsor?.id || '')}>
+					<a>{data?.sponsor?.title}</a>
+				</Link>
 			</h1>
 			<h2>
 				<FormattedMessage

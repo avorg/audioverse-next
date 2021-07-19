@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -24,16 +26,18 @@ function Presenters({ nodes, pagination }: Props): JSX.Element {
 			<ul>
 				{nodes.map((n) => (
 					<li key={n.id}>
-						<a href={makePersonRoute(languageRoute, n.id)}>
-							<img
-								src={n.imageWithFallback?.url}
-								alt={n.name}
-								width={100}
-								height={100}
-							/>
-							<span>{n.name}</span>
-							<span>{n.summary}</span>
-						</a>
+						<Link href={makePersonRoute(languageRoute, n.id)}>
+							<a>
+								<Image
+									src={n.imageWithFallback?.url}
+									alt={n.name}
+									width={100}
+									height={100}
+								/>
+								<span>{n.name}</span>
+								<span>{n.summary}</span>
+							</a>
+						</Link>
 					</li>
 				))}
 			</ul>

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -16,166 +18,202 @@ export default function Footer(): JSX.Element {
 		<div className={styles.footer}>
 			<ul>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemAboutUs`}
-							defaultMessage="About Us"
-							description={`Footer nav link name: About Us`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemAboutUs`}
+								defaultMessage="About Us"
+								description={`Footer nav link name: About Us`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemMeetTheTeam`}
-							defaultMessage="Meet the Team"
-							description={`Footer nav link name: Meet the Team`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemMeetTheTeam`}
+								defaultMessage="Meet the Team"
+								description={`Footer nav link name: Meet the Team`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemSpiritOfAudioVerse`}
-							defaultMessage="Spirit of AudioVerse"
-							description={`Footer nav link name: Spirit of AudioVerse`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemSpiritOfAudioVerse`}
+								defaultMessage="Spirit of AudioVerse"
+								description={`Footer nav link name: Spirit of AudioVerse`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemFAQ`}
-							defaultMessage="FAQ"
-							description={`Footer nav link name: FAQ`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemFAQ`}
+								defaultMessage="FAQ"
+								description={`Footer nav link name: FAQ`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemContactUs`}
-							defaultMessage="Contact Us"
-							description={`Footer nav link name: Contact Us`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemContactUs`}
+								defaultMessage="Contact Us"
+								description={`Footer nav link name: Contact Us`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href={`/${languageRoute}/sermons/all/page/1`}>
-						<FormattedMessage
-							id={`footer__NavItemPresentations`}
-							defaultMessage="Presentations"
-							description={`Footer nav link name: Presentations`}
-						/>
-					</a>
+					<Link href={`/${languageRoute}/sermons/all/page/1`}>
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemPresentations`}
+								defaultMessage="Presentations"
+								description={`Footer nav link name: Presentations`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemBibles`}
-							defaultMessage="Bibles"
-							description={`Footer nav link name: Bibles`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemBibles`}
+								defaultMessage="Bibles"
+								description={`Footer nav link name: Bibles`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemBooks`}
-							defaultMessage="Books"
-							description={`Footer nav link name: Books`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemBooks`}
+								defaultMessage="Books"
+								description={`Footer nav link name: Books`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemStories`}
-							defaultMessage="Stories"
-							description={`Footer nav link name: Stories`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemStories`}
+								defaultMessage="Stories"
+								description={`Footer nav link name: Stories`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemScriptureSongs`}
-							defaultMessage="Scripture Songs"
-							description={`Footer nav link name: Scripture Songs`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemScriptureSongs`}
+								defaultMessage="Scripture Songs"
+								description={`Footer nav link name: Scripture Songs`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemConferences`}
-							defaultMessage="Conferences"
-							description={`Footer nav link name: Conferences`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemConferences`}
+								defaultMessage="Conferences"
+								description={`Footer nav link name: Conferences`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemPresenters`}
-							defaultMessage="Presenters"
-							description={`Footer nav link name: Presenters`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemPresenters`}
+								defaultMessage="Presenters"
+								description={`Footer nav link name: Presenters`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href={`/${languageRoute}/tags/page/1`}>
-						<FormattedMessage
-							id={`footer__NavItemTags`}
-							defaultMessage="Tags"
-							description={`Footer nav link name: Tags`}
-						/>
-					</a>
+					<Link href={`/${languageRoute}/tags/page/1`}>
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemTags`}
+								defaultMessage="Tags"
+								description={`Footer nav link name: Tags`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemSponsors`}
-							defaultMessage="Sponsors"
-							description={`Footer nav link name: Sponsors`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemSponsors`}
+								defaultMessage="Sponsors"
+								description={`Footer nav link name: Sponsors`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemSeries`}
-							defaultMessage="Series"
-							description={`Footer nav link name: Series`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemSeries`}
+								defaultMessage="Series"
+								description={`Footer nav link name: Series`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href={`/${languageRoute}/testimonies/page/1`}>
-						<FormattedMessage
-							id={`footer__NavItemTestimonials`}
-							defaultMessage="Testimonials"
-							description={`Footer nav link name: Testimonials`}
-						/>
-					</a>
+					<Link href={`/${languageRoute}/testimonies/page/1`}>
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemTestimonials`}
+								defaultMessage="Testimonials"
+								description={`Footer nav link name: Testimonials`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemPlaylists`}
-							defaultMessage="Playlists"
-							description={`Footer nav link name: Playlists`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemPlaylists`}
+								defaultMessage="Playlists"
+								description={`Footer nav link name: Playlists`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<a href="#">
-						<FormattedMessage
-							id={`footer__NavItemBlog`}
-							defaultMessage="Blog"
-							description={`Footer nav link name: Blog`}
-						/>
-					</a>
+					<Link href="#">
+						<a>
+							<FormattedMessage
+								id={`footer__NavItemBlog`}
+								defaultMessage="Blog"
+								description={`Footer nav link name: Blog`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
 					<a
@@ -204,61 +242,71 @@ export default function Footer(): JSX.Element {
 					</a>
 				</li>
 				<li>
-					<a href="/de">Deutsch</a>
+					<Link href="/de">
+						<a>Deutsch</a>
+					</Link>
 				</li>
 				<li>
-					<a href="/en">English</a>
+					<Link href="/en">
+						<a>English</a>
+					</Link>
 				</li>
 				<li>
-					<a href="/es">Español</a>
+					<Link href="/es">
+						<a>Español</a>
+					</Link>
 				</li>
 				<li>
-					<a href="/fr">Français</a>
+					<Link href="/fr">
+						<a>Français</a>
+					</Link>
 				</li>
 				<li>
-					<a href="/ja">日本語</a>
+					<Link href="/ja">
+						<a>日本語</a>
+					</Link>
 				</li>
 				<li>
-					<a href="/zh">中文</a>
+					<Link href="/zh">
+						<a>中文</a>
+					</Link>
 				</li>
 				<li>
-					<a href="/ru">Русский</a>
+					<Link href="/ru">
+						<a>Русский</a>
+					</Link>
 				</li>
 			</ul>
 
-			<a
-				href="https://itunes.apple.com/us/app/audioverse/id726998810?mt=8"
-				target={'_blank'}
-				rel={'noreferrer noopener'}
-			>
-				<img
-					src="/img/app-apple.png"
-					alt={intl.formatMessage({
-						id: 'footer__iosAppImageAlt',
-						defaultMessage: 'iOS App',
-						description: 'iOS app link image alt text',
-					})}
-					width={230}
-					height={80}
-				/>
-			</a>
+			<Link href="https://itunes.apple.com/us/app/audioverse/id726998810?mt=8">
+				<a target={'_blank'} rel={'noreferrer noopener'}>
+					<Image
+						src="/img/app-apple.png"
+						alt={intl.formatMessage({
+							id: 'footer__iosAppImageAlt',
+							defaultMessage: 'iOS App',
+							description: 'iOS app link image alt text',
+						})}
+						width={230}
+						height={80}
+					/>
+				</a>
+			</Link>
 
-			<a
-				href="https://play.google.com/store/apps/details?id=org.audioverse.exodus"
-				target={'_blank'}
-				rel={'noreferrer noopener'}
-			>
-				<img
-					src="/img/app-android.png"
-					alt={intl.formatMessage({
-						id: 'footer__androidAppImageAlt',
-						defaultMessage: 'Android App',
-						description: 'Android app link image alt text',
-					})}
-					width={230}
-					height={80}
-				/>
-			</a>
+			<Link href="https://play.google.com/store/apps/details?id=org.audioverse.exodus">
+				<a target={'_blank'} rel={'noreferrer noopener'}>
+					<Image
+						src="/img/app-android.png"
+						alt={intl.formatMessage({
+							id: 'footer__androidAppImageAlt',
+							defaultMessage: 'Android App',
+							description: 'Android app link image alt text',
+						})}
+						width={230}
+						height={80}
+					/>
+				</a>
+			</Link>
 
 			<p>
 				<FormattedMessage
@@ -269,42 +317,44 @@ export default function Footer(): JSX.Element {
 				/>
 				{/*<span>{`AudioVerse © ${new Date().getFullYear()} All Rights Reserved.`}</span>{' '}*/}
 				{/* TODO: Update links when pages exist */}
-				<a href="#">
-					<FormattedMessage
-						id={`footer__legalInfoLink`}
-						defaultMessage="Legal Info"
-						description={`Footer legal info link text`}
-					/>
-				</a>
+				<Link href="#">
+					<a>
+						<FormattedMessage
+							id={`footer__legalInfoLink`}
+							defaultMessage="Legal Info"
+							description={`Footer legal info link text`}
+						/>
+					</a>
+				</Link>
 				,{' '}
-				<a href="#">
-					<FormattedMessage
-						id={`footer__termsLink`}
-						defaultMessage="Terms of Use"
-						description={`Footer terms of use link text`}
-					/>
-				</a>
+				<Link href="#">
+					<a>
+						<FormattedMessage
+							id={`footer__termsLink`}
+							defaultMessage="Terms of Use"
+							description={`Footer terms of use link text`}
+						/>
+					</a>
+				</Link>
 				,{' '}
-				<a href="#">
-					<FormattedMessage
-						id={`footer__privacyPolicyLink`}
-						defaultMessage="Privacy Policy"
-						description={`Footer privacy policy link text`}
-					/>
-				</a>
+				<Link href="#">
+					<a>
+						<FormattedMessage
+							id={`footer__privacyPolicyLink`}
+							defaultMessage="Privacy Policy"
+							description={`Footer privacy policy link text`}
+						/>
+					</a>
+				</Link>
 				.{' '}
 				<FormattedMessage
 					id={`footer__designedBy`}
 					defaultMessage="Designed by"
 					description={`Footer designed by prefix`}
 				/>{' '}
-				<a
-					href="https://typesandsymbols.com/"
-					target={'_blank'}
-					rel={'noreferrer noopener'}
-				>
-					Types & Symbols
-				</a>
+				<Link href="https://typesandsymbols.com/">
+					<a>Types & Symbols</a>
+				</Link>
 				.
 			</p>
 		</div>

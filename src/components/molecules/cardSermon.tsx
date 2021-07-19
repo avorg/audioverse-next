@@ -2,6 +2,8 @@ import React from 'react';
 
 import CardPlayable from '@components/molecules/cardPlayable';
 import { CardSermonFragment } from '@lib/generated/graphql';
+import { makeSermonRoute } from '@lib/routes';
+import useLanguageRoute from '@lib/useLanguageRoute';
 
 import ListIcon from '../../../public/img/icon-list-alt-solid.svg';
 
@@ -18,6 +20,7 @@ interface CardSermonProps {
 export default function CardSermon({
 	recording,
 }: CardSermonProps): JSX.Element {
+	const languageRoute = useLanguageRoute();
 	const container = recording.sequence
 		? {
 				icon: <ListIcon width={12} height={12} />,
@@ -30,6 +33,8 @@ export default function CardSermon({
 
 	return (
 		<CardPlayable
+			recording={recording}
+			url={makeSermonRoute(languageRoute, recording.id)}
 			container={container}
 			// TODO: set progress dynamically
 			progress={0}

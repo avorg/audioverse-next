@@ -16,6 +16,8 @@ interface UniformResourceLocatable {
 	shareUrl: URL!
 }
 
+union CatalogHistoryEntityUnion = Collection | DistributionAgreement | License | MediaRelease | Person | Recording | Sequence | Sponsor
+
 union FavoriteEntityUnion = Collection | Person | Recording | Sequence | Sponsor
 
 union MediaFileResult = Attachment | AudioFile | VideoFile
@@ -152,7 +154,7 @@ type BibleVerse {
 	text: String!
 }
 
-type BlogPost implements Node {
+type BlogPost implements Node & UniformResourceLocatable {
 	body: String!
 	"The canonical HTML path to this resource."
 	canonicalPath: String!
@@ -198,8 +200,9 @@ type CatalogHistoryComment {
 type CatalogHistoryItem implements Node {
 	comment: CatalogHistoryComment
 	createdAt: DateTime!
+	entity: CatalogHistoryEntityUnion
 	id: ID!
-	performer: User!
+	performer: User
 	type: CatalogHistoryItemType!
 }
 
@@ -220,7 +223,7 @@ type CatalogHistoryItemPayload {
 	errors: [InputValidationError!]!
 }
 
-type Collection implements Node {
+type Collection implements Node & UniformResourceLocatable {
 	"The canonical HTML path to this resource."
 	canonicalPath: String!
 	"The canonical URL to this resource."
@@ -234,12 +237,17 @@ type Collection implements Node {
 	history(
 		"Return the elements that come after the specified cursor."
 		after: String,
+		"The date of the history item must fall within the provided date range."
+		dateRange: DateRangeInput,
 		"Return up to the first `n` elements from the list."
 		first: Int,
 		isSticky: Boolean,
+		"Limit history items to those that have not been marked read."
+		isUnread: Boolean,
 		"Return the elements that come after the specified offset."
 		offset: Int,
-		orderBy: [CatalogHistoryItemOrder!]
+		orderBy: [CatalogHistoryItemOrder!],
+		viewFilters: [CatalogHistoryItemViewFilter!]
 	): CatalogHistoryItemConnection
 	id: ID!
 	image: Image
@@ -291,6 +299,9 @@ type Collection implements Node {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 	sequences(
@@ -321,6 +332,8 @@ type Collection implements Node {
 	summary: String!
 	title: String!
 	viewerHasFavorited: Boolean!
+	"The percentage of the associated recordings the viewer has finished playing."
+	viewerPlaybackCompletedPercentage: Float!
 }
 
 type CollectionConnection {
@@ -344,12 +357,17 @@ type DistributionAgreement implements Node {
 	history(
 		"Return the elements that come after the specified cursor."
 		after: String,
+		"The date of the history item must fall within the provided date range."
+		dateRange: DateRangeInput,
 		"Return up to the first `n` elements from the list."
 		first: Int,
 		isSticky: Boolean,
+		"Limit history items to those that have not been marked read."
+		isUnread: Boolean,
 		"Return the elements that come after the specified offset."
 		offset: Int,
-		orderBy: [CatalogHistoryItemOrder!]
+		orderBy: [CatalogHistoryItemOrder!],
+		viewFilters: [CatalogHistoryItemViewFilter!]
 	): CatalogHistoryItemConnection
 	id: ID!
 	isDefault: Boolean!
@@ -398,6 +416,9 @@ type DistributionAgreement implements Node {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 	sponsor: Sponsor
@@ -525,12 +546,17 @@ type License implements Node {
 	history(
 		"Return the elements that come after the specified cursor."
 		after: String,
+		"The date of the history item must fall within the provided date range."
+		dateRange: DateRangeInput,
 		"Return up to the first `n` elements from the list."
 		first: Int,
 		isSticky: Boolean,
+		"Limit history items to those that have not been marked read."
+		isUnread: Boolean,
 		"Return the elements that come after the specified offset."
 		offset: Int,
-		orderBy: [CatalogHistoryItemOrder!]
+		orderBy: [CatalogHistoryItemOrder!],
+		viewFilters: [CatalogHistoryItemViewFilter!]
 	): CatalogHistoryItemConnection
 	id: ID!
 	image: Image
@@ -787,6 +813,9 @@ type Mutation {
 	): RecordingPayload!
 	recordingFavorite(id: ID!): SuccessPayload!
 	recordingHistoryCommentCreate(input: CatalogHistoryCommentCreateInput!, recordingId: ID!): CatalogHistoryItemPayload!
+	recordingPlaybackSessionAdvance(input: PlaybackSessionAdvanceInput!, recordingId: ID!): RecordingPayload!
+	recordingPlaybackSessionBegin(recordingId: ID!): RecordingPayload!
+	recordingPlaybackSessionFinish(recordingId: ID!): RecordingPayload!
 	recordingScreeningContentCheckoutCreate(recordingId: ID!, userId: ID): RecordingScreeningCheckoutPayload!
 	recordingScreeningContentCheckoutDelete(recordingId: ID!, userId: ID): SuccessPayload!
 	recordingScreeningContentEvaluate(approve: Boolean!, recordingId: ID!): RecordingPayload!
@@ -832,6 +861,8 @@ type Mutation {
 	updateMyProfile(input: UserUpdateInput!): AuthenticatedUserPayload!
 	userCreate(input: UserCreateInput!): UserPayload!
 	userDelete(userId: ID!): SuccessPayload!
+	"Mark all notifications read for the current viewer."
+	userNotificationsRead: UserPayload!
 	"Sends a reset password email to the user, as the first step in the reset password process."
 	userRecover(
 		"The email address of the user to recover."
@@ -845,6 +876,41 @@ type Mutation {
 		token: String!
 	): SuccessPayload!
 	userUpdate(input: UserUpdateInput!, userId: ID!): UserPayload!
+}
+
+type NotificationChannel implements Node {
+	description: String!
+	id: ID!
+	title: String!
+}
+
+type NotificationChannelConnection {
+	aggregate: Aggregate
+	edges: [NotificationChannelEdge!]
+	nodes: [NotificationChannel!]
+	pageInfo: PageInfo!
+}
+
+type NotificationChannelEdge {
+	cursor: String!
+	node: NotificationChannel!
+}
+
+type NotificationSubscription {
+	frequency: NotificationFrequency!
+	notificationChannel: NotificationChannel!
+}
+
+type NotificationSubscriptionConnection {
+	aggregate: Aggregate
+	edges: [NotificationSubscriptionEdge!]
+	nodes: [NotificationSubscription!]
+	pageInfo: PageInfo!
+}
+
+type NotificationSubscriptionEdge {
+	cursor: String!
+	node: NotificationSubscription!
 }
 
 type Page implements Node {
@@ -904,7 +970,7 @@ type PagePayload {
 	page: Page
 }
 
-type Person implements Node {
+type Person implements Node & UniformResourceLocatable {
 	address: String
 	"The canonical HTML path to this resource."
 	canonicalPath: String!
@@ -918,12 +984,17 @@ type Person implements Node {
 	history(
 		"Return the elements that come after the specified cursor."
 		after: String,
+		"The date of the history item must fall within the provided date range."
+		dateRange: DateRangeInput,
 		"Return up to the first `n` elements from the list."
 		first: Int,
 		isSticky: Boolean,
+		"Limit history items to those that have not been marked read."
+		isUnread: Boolean,
 		"Return the elements that come after the specified offset."
 		offset: Int,
-		orderBy: [CatalogHistoryItemOrder!]
+		orderBy: [CatalogHistoryItemOrder!],
+		viewFilters: [CatalogHistoryItemViewFilter!]
 	): CatalogHistoryItemConnection
 	id: ID!
 	image: Image
@@ -977,6 +1048,9 @@ type Person implements Node {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!],
 		"Finds all the recordings where the person has the specified role."
 		withRole: PersonsRoleField
@@ -1123,6 +1197,9 @@ type Query {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 	audiobooks(
@@ -1291,6 +1368,9 @@ type Query {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection! @deprecated(reason : "`featuredRecordings` is replaced by `recordings(isFeatured: true)`")
 	license(id: ID!): License
@@ -1477,8 +1557,19 @@ type Query {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
+	notificationChannels(
+		"Return the elements that come after the specified cursor."
+		after: String,
+		"Return up to the first `n` elements from the list."
+		first: Int,
+		"Return the elements that come after the specified offset."
+		offset: Int
+	): NotificationChannelConnection
 	page(id: ID!): Page
 	pageMenus(
 		"Return the elements that come after the specified cursor."
@@ -1564,6 +1655,9 @@ type Query {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): PopularRecordingConnection!
 	recording(
@@ -1626,6 +1720,9 @@ type Query {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 	sequence(id: ID!): Sequence
@@ -1718,6 +1815,9 @@ type Query {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 	sponsor(id: ID!): Sponsor
@@ -1780,6 +1880,9 @@ type Query {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 	"Alias for `recording(id: ID)`"
@@ -1848,6 +1951,7 @@ type Query {
 		offset: Int,
 		orderBy: [TestimoniesOrder!]
 	): TestimonyConnection!
+	testimony(id: ID!): Testimony
 	user(id: ID!): User
 	users(
 		"Return the elements that come after the specified cursor."
@@ -1860,6 +1964,8 @@ type Query {
 		offset: Int,
 		orderBy: [UsersOrder!],
 		search: String,
+		"Filters users to those with read access to the specified entity type."
+		withReadAccess: UserLanguageEntityInput,
 		"Filters users to those with the specified role."
 		withRole: UserLanguageRoleInput
 	): UserConnection!
@@ -1873,7 +1979,7 @@ type Query {
 	): WebsiteConnection!
 }
 
-type Recording implements Node {
+type Recording implements Node & UniformResourceLocatable {
 	"Requires `ADMINISTRATION` role."
 	archiveDate: DateTime
 	"Requires `ADMINISTRATION` role."
@@ -1918,12 +2024,17 @@ type Recording implements Node {
 	history(
 		"Return the elements that come after the specified cursor."
 		after: String,
+		"The date of the history item must fall within the provided date range."
+		dateRange: DateRangeInput,
 		"Return up to the first `n` elements from the list."
 		first: Int,
 		isSticky: Boolean,
+		"Limit history items to those that have not been marked read."
+		isUnread: Boolean,
 		"Return the elements that come after the specified offset."
 		offset: Int,
-		orderBy: [CatalogHistoryItemOrder!]
+		orderBy: [CatalogHistoryItemOrder!],
+		viewFilters: [CatalogHistoryItemViewFilter!]
 	): CatalogHistoryItemConnection
 	id: ID!
 	imageWithFallback: Image!
@@ -1978,6 +2089,7 @@ type Recording implements Node {
 	transcriptionStatus: RecordingTranscriptionStatus
 	videoFiles(allowedContainers: [MediaFileContainer!], includeUnpublished: Boolean): [VideoFile!]!
 	viewerHasFavorited: Boolean!
+	viewerPlaybackSession: RecordingPlaybackSession
 	websites: [Website!]!
 }
 
@@ -2010,6 +2122,13 @@ type RecordingEdge {
 type RecordingPayload {
 	errors: [InputValidationError!]!
 	recording: Recording
+}
+
+type RecordingPlaybackSession {
+	createdAt: DateTime!
+	"The playback position as a percentage of the recording duration."
+	positionPercentage: Float!
+	updatedAt: DateTime!
 }
 
 type RecordingScreeningCheckout {
@@ -2105,7 +2224,7 @@ type RecordingTagSuggestionEdge {
 	node: RecordingTagSuggestion!
 }
 
-type Sequence implements Node {
+type Sequence implements Node & UniformResourceLocatable {
 	"The canonical HTML path to this resource."
 	canonicalPath: String!
 	"The canonical URL to this resource."
@@ -2120,12 +2239,17 @@ type Sequence implements Node {
 	history(
 		"Return the elements that come after the specified cursor."
 		after: String,
+		"The date of the history item must fall within the provided date range."
+		dateRange: DateRangeInput,
 		"Return up to the first `n` elements from the list."
 		first: Int,
 		isSticky: Boolean,
+		"Limit history items to those that have not been marked read."
+		isUnread: Boolean,
 		"Return the elements that come after the specified offset."
 		offset: Int,
-		orderBy: [CatalogHistoryItemOrder!]
+		orderBy: [CatalogHistoryItemOrder!],
+		viewFilters: [CatalogHistoryItemViewFilter!]
 	): CatalogHistoryItemConnection
 	id: ID!
 	image: Image
@@ -2175,6 +2299,9 @@ type Sequence implements Node {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 	"A shareable short URL to this resource."
@@ -2188,6 +2315,8 @@ type Sequence implements Node {
 	summary: String!
 	title: String!
 	viewerHasFavorited: Boolean!
+	"The percentage of the associated recordings the viewer has finished playing."
+	viewerPlaybackCompletedPercentage: Float!
 }
 
 type SequenceConnection {
@@ -2250,12 +2379,17 @@ type Sponsor implements Node & UniformResourceLocatable {
 	history(
 		"Return the elements that come after the specified cursor."
 		after: String,
+		"The date of the history item must fall within the provided date range."
+		dateRange: DateRangeInput,
 		"Return up to the first `n` elements from the list."
 		first: Int,
 		isSticky: Boolean,
+		"Limit history items to those that have not been marked read."
+		isUnread: Boolean,
 		"Return the elements that come after the specified offset."
 		offset: Int,
-		orderBy: [CatalogHistoryItemOrder!]
+		orderBy: [CatalogHistoryItemOrder!],
+		viewFilters: [CatalogHistoryItemViewFilter!]
 	): CatalogHistoryItemConnection
 	id: ID!
 	image: Image
@@ -2310,6 +2444,9 @@ type Sponsor implements Node & UniformResourceLocatable {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 	sequences(
@@ -2407,6 +2544,9 @@ type Tag implements Node {
 		"Implies includeUnpublished. Requires `EDITOR` role."
 		stage: RecordingStage,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 }
@@ -2528,6 +2668,9 @@ type User implements Node {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 	favorites(
@@ -2535,6 +2678,7 @@ type User implements Node {
 		after: String,
 		"Return up to the first `n` elements from the list."
 		first: Int,
+		groupSequences: Boolean,
 		language: Language!,
 		"Return the elements that come after the specified offset."
 		offset: Int,
@@ -2556,6 +2700,32 @@ type User implements Node {
 	lastActivity: DateTime!
 	"The full name of the user, based on the values for givenName and surname."
 	name: String!
+	"Available only for viewer `User`."
+	notificationSubscriptions(
+		"Return the elements that come after the specified cursor."
+		after: String,
+		"Return up to the first `n` elements from the list."
+		first: Int,
+		"Return the elements that come after the specified offset."
+		offset: Int
+	): NotificationSubscriptionConnection
+	"Available only for viewer `User`."
+	notifications(
+		"Return the elements that come after the specified cursor."
+		after: String,
+		"The date of the history item must fall within the provided date range."
+		dateRange: DateRangeInput,
+		"Return up to the first `n` elements from the list."
+		first: Int,
+		isSticky: Boolean,
+		"Limit history items to those that have not been marked read."
+		isUnread: Boolean,
+		language: Language!,
+		"Return the elements that come after the specified offset."
+		offset: Int,
+		orderBy: [CatalogHistoryItemOrder!],
+		viewFilters: [CatalogHistoryItemViewFilter!]
+	): CatalogHistoryItemConnection
 	playlist(id: ID!): UserPlaylist
 	playlists(
 		"Return the elements that come after the specified cursor."
@@ -2670,6 +2840,9 @@ type UserPlaylist implements Node {
 		"The name of the tag to filter the recordings by."
 		tagName: String,
 		technicalScreeningStatus: RecordingTechnicalScreeningStatus,
+		"The last updated date of the recording must fall within one of the sets of date ranges."
+		updatedDates: [DateRangeInput!],
+		viewerHasFavorited: Boolean,
 		websiteIds: [ID!]
 	): RecordingConnection!
 	summary: String!
@@ -2806,6 +2979,17 @@ enum BlogPostSortableField {
 	PUBLISHED_AT
 }
 
+"The types of catalog entities."
+enum CatalogEntityType {
+	COLLECTION
+	DISTRIBUTION_AGREEMENT
+	LICENSE
+	PERSON
+	RECORDING
+	SEQUENCE
+	SPONSOR
+}
+
 "Properties by which history item connections can be ordered."
 enum CatalogHistoryItemSortableField {
 	CREATED_AT
@@ -2814,9 +2998,33 @@ enum CatalogHistoryItemSortableField {
 "The supported types of catalog history items."
 enum CatalogHistoryItemType {
 	ARCHIVE
+	CHECKOUT_CONTENT
+	CHECKOUT_LEGAL
+	CHECKOUT_TECHNICAL
+	CREATED
+	DELETED
+	ENCODING_ERROR
+	FILE_UPLOADED
+	HIDDEN
 	INTERNAL_COMMENT
-	SPONSOR_CHANGED
+	MEDIA_RELEASE_SUBMIT
+	RECORDING_SCREENING_CLEARED
+	SCREENING_CONTENT_AVAILABLE
+	SCREENING_CONTENT_FLAG
+	SCREENING_LEGAL_AVAILABLE
+	SCREENING_LEGAL_FLAG
+	SCREENING_TECHNICAL_AVAILABLE
+	SCREENING_TECHNICAL_FLAG
+	SYSTEM_ERROR
 	UNARCHIVE
+	UPDATED
+}
+
+"The supported view filter of catalog history items."
+enum CatalogHistoryItemViewFilter {
+	COMMENTS
+	LOGS
+	MENTIONS
 }
 
 "The available types of collections."
@@ -2831,6 +3039,7 @@ enum CollectionContentType {
 enum CollectionsSortableField {
 	CREATED_AT
 	ID
+	RECORDING_PUBLISHED_AT
 	TITLE
 }
 
@@ -2994,6 +3203,18 @@ enum MediaReleaseSortableField {
 	SURNAME
 }
 
+"The periods notifications can be sent on."
+enum NotificationFrequency {
+	"Notifications will be sent in a daily digest."
+	DAILY
+	"Notifications will be sent immediately."
+	IMMEDIATE
+	"Notifications will be sent in a monthly digest."
+	MONTHLY
+	"Notifications will be sent in a weekly digest."
+	WEEKLY
+}
+
 "Possible directions in which to order a list of items when provided an `orderBy` argument."
 enum OrderByDirection {
 	ASC
@@ -3036,6 +3257,7 @@ enum PersonsSortableField {
 	CREATED_AT
 	ID
 	NAME
+	RECORDING_PUBLISHED_AT
 }
 
 "The content screening evaluation recommendations for a recording."
@@ -3177,6 +3399,7 @@ enum RecordingTranscriptionStatus {
 enum RecordingsSortableField {
 	COLLECTION_TITLE
 	CREATED_AT
+	DOWNLOADS_ALL_TIME
 	ID
 	PUBLISHED_AT
 	RECORDED_AT
@@ -3198,6 +3421,7 @@ enum SequenceContentType {
 enum SequenceSortableField {
 	CREATED_AT
 	ID
+	RECORDING_PUBLISHED_AT
 	TITLE
 }
 
@@ -3205,6 +3429,7 @@ enum SequenceSortableField {
 enum SponsorsSortableField {
 	CREATED_AT
 	ID
+	RECORDING_PUBLISHED_AT
 	TITLE
 }
 
@@ -4159,6 +4384,11 @@ input MediaReleaseUpdateInput {
 	personId: ID
 }
 
+input NotificationSubscriptionInput {
+	frequency: NotificationFrequency!
+	notificationChannelId: ID!
+}
+
 input PageCreateInput {
 	body: String!
 	isHidden: Boolean
@@ -4234,6 +4464,11 @@ input PersonUpdateInput {
 input PersonsOrder {
 	direction: OrderByDirection!
 	field: PersonsSortableField!
+}
+
+input PlaybackSessionAdvanceInput {
+	"The playback position as a percentage of the recording duration."
+	positionPercentage: Float!
 }
 
 input RecordingCreateInput {
@@ -4482,6 +4717,7 @@ input UserCreateInput {
 	isSuperuser: Boolean
 	"The user's preferred interface language."
 	language: Language
+	notificationSubscriptions: [NotificationSubscriptionInput!]
 	"The user's password."
 	password: String
 	"The postal or zip code."
@@ -4496,6 +4732,13 @@ input UserCreateInput {
 	surname: String
 	"The user's timezone."
 	timezone: Timezone
+}
+
+input UserLanguageEntityInput {
+	"The entity type."
+	entityType: CatalogEntityType!
+	"The language scope for the entity."
+	language: Language!
 }
 
 input UserLanguageRoleInput {
@@ -4563,6 +4806,7 @@ input UserUpdateInput {
 	isSuperuser: Boolean
 	"The user's preferred interface language."
 	language: Language
+	notificationSubscriptions: [NotificationSubscriptionInput!]
 	"The user's password."
 	password: String
 	"The postal or zip code."

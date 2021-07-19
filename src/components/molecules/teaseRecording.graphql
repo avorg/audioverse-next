@@ -1,0 +1,3 @@
+fragment teaseRecording on Recording {
+	...buttonPlay
+}

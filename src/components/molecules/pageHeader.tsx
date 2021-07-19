@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 import RssLink from '@components/molecules/rssLink';
@@ -14,7 +15,7 @@ interface Props {
 export default function PageHeader(props: Props): JSX.Element {
 	return (
 		<>
-			<img src={props.imageUrl} alt={props.title} width={100} height={100} />
+			<Image src={props.imageUrl} alt={props.title} width={100} height={100} />
 			<h1>{props.title}</h1>
 			<RssLink href={props.rssUrl} />
 		</>

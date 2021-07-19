@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import withFailStates from '@components/HOCs/withFailStates';
@@ -32,9 +33,15 @@ function SermonList({ nodes, pagination, rssPath, filter }: SermonListProps) {
 		<div>
 			<RssLink href={rssPath} />
 			<div>
-				<a href={makeSermonListRouteAll(lang, 1)}>All</a>
-				<a href={makeSermonListRouteVideo(lang, 1)}>Video</a>
-				<a href={makeSermonListRouteAudio(lang, 1)}>Audio</a>
+				<Link href={makeSermonListRouteAll(lang, 1)}>
+					<a>All</a>
+				</Link>
+				<Link href={makeSermonListRouteVideo(lang, 1)}>
+					<a>Video</a>
+				</Link>
+				<Link href={makeSermonListRouteAudio(lang, 1)}>
+					<a>Audio</a>
+				</Link>
 			</div>
 			<RecordingList recordings={nodes} />
 			<Pagination

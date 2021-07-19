@@ -1,0 +1,87 @@
+@import '../../styles/common';
+
+.poster {
+	background: none;
+	border: none;
+	margin: 1rem 0 0 0;
+	padding: 0;
+	cursor: pointer;
+	display: block;
+	div {
+		display: block !important;
+	}
+}
+
+.controls {
+	display: flex;
+	button {
+		flex: 0 0 auto;
+		background: none;
+		border: none;
+		color: $ts-red;
+		svg {
+			font-size: 4rem;
+		}
+	}
+	> div {
+		flex-grow: 1;
+	}
+}
+
+.waves {
+	flex-grow: 1;
+	position: relative;
+	background-image: url('/img/waves.svg');
+	height: 50px;
+	input {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 100%;
+		z-index: 500;
+		margin: 0;
+		opacity: 0;
+		cursor: pointer;
+	}
+	path {
+		stroke: $ts-red;
+	}
+	&:after {
+		content: '';
+		display: block;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: calc(100% - var(--progress, 0%));
+		z-index: 100;
+		backdrop-filter: grayscale(100%);
+		background-color: rgba(255, 255, 255, 0.85);
+		pointer-events: none;
+	}
+}
+
+.buttons {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	div {
+		display: flex;
+		align-items: center;
+	}
+	button {
+		background: none;
+		border: none;
+		cursor: pointer;
+	}
+}
+
+.videoProgress {
+	--visualHeight: 4px;
+	--barColor: #{$ts-midTone};
+	--progressColor: #{$ts-salmon};
+	position: relative;
+	top: -14px;
+}

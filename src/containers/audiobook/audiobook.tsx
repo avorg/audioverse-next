@@ -21,13 +21,10 @@ function Audiobook({ audiobook, rssPath }: AudiobookProps): JSX.Element {
 	return (
 		<Playlist recordings={recordings}>
 			{(recording) => {
-				const audioFiles = recording.audioFiles || [];
-				const sources = [{ src: audioFiles[0]?.url }];
-
 				return (
 					<>
 						<RssLink href={rssPath} />
-						{recording && <Player sources={sources} />}
+						{recording && <Player recording={recording} />}
 						<p>
 							<FormattedMessage
 								id="audiobookDetailPage__nowPlaying"

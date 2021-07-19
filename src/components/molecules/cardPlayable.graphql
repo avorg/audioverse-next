@@ -1,0 +1,3 @@
+fragment cardPlayable on Recording {
+	...progressBar
+}

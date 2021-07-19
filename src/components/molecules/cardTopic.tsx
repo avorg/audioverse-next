@@ -14,6 +14,7 @@ export default function CardTopic({
 }: CardTopicProps): JSX.Element {
 	return (
 		<CardPlayable
+			recording={topicRecording}
 			theme={'topic'}
 			container={{
 				icon: <HatIcon width={12} height={12} />,
@@ -22,6 +23,8 @@ export default function CardTopic({
 			}}
 			// TODO: Set progress dynamically
 			progress={0.3}
+			// TODO: Generate URL
+			url={'#'}
 			{...topicRecording}
 		/>
 	);

@@ -1,8 +1,10 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { when } from 'jest-when';
 import _ from 'lodash';
 import { GetServerSidePropsContext } from 'next';
+import React from 'react';
+import ReactTestUtils from 'react-dom/test-utils';
 import { QueryClient } from 'react-query';
 import { hydrate } from 'react-query/hydration';
 
@@ -22,7 +24,6 @@ import {
 import Profile, { getServerSideProps } from '@pages/[language]/account/profile';
 
 import resetAllMocks = jest.resetAllMocks;
-
 jest.mock('@lib/api/login');
 
 const renderPage = buildServerRenderer(Profile, getServerSideProps);
@@ -166,14 +167,13 @@ describe('profile page', () => {
 	it('prevents default form submission', async () => {
 		const { getByTestId } = await renderPage();
 
-		const form = getByTestId('loginForm');
+		const event = {
+			preventDefault: jest.fn(),
+		};
 
-		const event = new Event('submit');
-		Object.assign(event, { preventDefault: jest.fn() });
+		ReactTestUtils.Simulate.submit(getByTestId('loginForm'), event);
 
-		fireEvent(form, event);
-
-		expect(event.preventDefault).toHaveBeenCalled();
+		await waitFor(() => expect(event.preventDefault).toHaveBeenCalled());
 	});
 
 	it('invalidates cache on successful login', async () => {
@@ -207,7 +207,7 @@ describe('profile page', () => {
 	});
 
 	it('does not fetch profile data if not logged in', async () => {
-		await renderWithIntl(Profile, {});
+		await renderWithIntl(<Profile />);
 
 		expect(mockedFetchApi).not.toBeCalledWith(
 			GetProfileDataDocument,

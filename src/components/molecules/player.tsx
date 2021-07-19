@@ -1,57 +1,120 @@
-import _ from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js';
+import Image from 'next/image';
+import React, { CSSProperties } from 'react';
+import { useIntl } from 'react-intl';
 
-// Source:
-// https://github.com/vercel/next.js/blob/canary/examples/with-videojs/components/Player.js
+import ProgressBar from '@components/atoms/progressBar';
+import ButtonDownload from '@components/molecules/buttonDownload';
+import ButtonFavorite from '@components/molecules/buttonFavorite';
+import ButtonNudge from '@components/molecules/buttonNudge';
+import ButtonPlay from '@components/molecules/buttonPlay';
+import ButtonShare from '@components/molecules/buttonShare';
+import ButtonSpeed from '@components/molecules/buttonSpeed';
+import PlaybackTimes from '@components/molecules/playbackTimes';
+import { PlayerFragment } from '@lib/generated/graphql';
+import hasVideo from '@lib/hasVideo';
+import usePlaybackSession from '@lib/usePlaybackSession';
 
-// If this solution becomes unviable, for instance, due to needing to
-// update more props than just sources, this alternative approach may work:
-// https://github.com/videojs/video.js/issues/4970#issuecomment-520591504
+import IconFullscreen from '../../../public/img/icon-fullscreen.svg';
 
-const Player = (props: VideoJsPlayerOptions): JSX.Element => {
-	// TODO: Fix poster disappearing after audio playback start
-	const options = {
-		poster: 'https://s.audioverse.org/images/template/player-bg4.jpg',
-		controls: true,
-		fluid: true,
-		// TODO: Should this be set back to `auto` once streaming urls are fixed?
-		// https://docs.videojs.com/docs/guides/options.html
-		preload: 'metadata',
-		...props,
-	};
+import styles from './player.module.scss';
 
-	const [videoEl, setVideoEl] = useState(null);
-	const [player, setPlayer] = useState<VideoJsPlayer | null>(null);
-	const onVideo = useCallback((el) => setVideoEl(el), []);
-	const sources = _.get(props, 'sources');
-	const hasSources = sources && sources.length > 0;
+export interface PlayerProps {
+	recording: PlayerFragment;
+}
 
-	useEffect(() => {
-		if (videoEl == null) return;
-		if (!hasSources) return;
+const Player = ({ recording }: PlayerProps): JSX.Element => {
+	if (!recording) return <p>loading ...</p>;
 
-		if (!player) {
-			setPlayer(videojs(videoEl, options));
-		} else if (sources) {
-			player.src(sources);
-		}
-	}, [hasSources, sources, videoEl]);
+	const intl = useIntl();
+	const session = usePlaybackSession(recording);
+	const shouldShowPoster = !session.isLoaded && hasVideo(recording);
+	const shouldShowAudioControls = !hasVideo(recording) || session.isAudioLoaded;
+	const shouldShowVideoControls = !shouldShowAudioControls;
+	const video = session.getVideo();
 
-	return hasSources ? (
-		<div data-vjs-player={true}>
-			<video ref={onVideo} className="video-js" playsInline />
+	return (
+		<div
+			data-testid={recording.id}
+			aria-label={intl.formatMessage({
+				id: 'player__playerLabel',
+				defaultMessage: 'player',
+				description: 'player label',
+			})}
+		>
+			{shouldShowPoster && (
+				<button className={styles.poster} onClick={() => session.play()}>
+					<Image
+						src="/img/poster.jpg"
+						alt={recording.title}
+						width={1500}
+						height={500}
+					/>
+				</button>
+			)}
+
+			{session.isVideoLoaded && video}
+
+			{shouldShowVideoControls && (
+				<div className={styles.videoProgress}>
+					<ProgressBar recording={recording} />
+					<PlaybackTimes recording={recording} />
+				</div>
+			)}
+
+			{shouldShowAudioControls && (
+				<div className={styles.controls}>
+					<ButtonPlay recording={recording} />
+					<div>
+						<div
+							className={styles.waves}
+							style={
+								{ '--progress': `${session.progress * 100}%` } as CSSProperties
+							}
+						>
+							<input
+								type="range"
+								aria-label={intl.formatMessage({
+									id: 'player__progressLabel',
+									defaultMessage: 'progress',
+									description: 'player progress label',
+								})}
+								value={session.progress * 100}
+								onChange={(e) => {
+									const percent = parseInt(e.target.value) / 100;
+									session.setProgress(percent);
+								}}
+							/>
+						</div>
+						<PlaybackTimes recording={recording} />
+					</div>
+				</div>
+			)}
+
+			<div className={styles.buttons}>
+				<div>
+					<ButtonNudge recording={recording} reverse={true} />
+					<ButtonNudge recording={recording} />
+					<ButtonSpeed recording={recording} />
+				</div>
+				<div>
+					<ButtonDownload recording={recording} />
+					<ButtonShare />
+					<ButtonFavorite id={recording.id} />
+					{shouldShowVideoControls && (
+						<button
+							aria-label={intl.formatMessage({
+								id: 'player__fullscreenButtonLabel',
+								defaultMessage: 'fullscreen',
+								description: 'player fullscreen button label',
+							})}
+							onClick={() => session.requestFullscreen()}
+						>
+							<IconFullscreen />
+						</button>
+					)}
+				</div>
+			</div>
 		</div>
-	) : (
-		<p>
-			<FormattedMessage
-				id="player__noSources"
-				defaultMessage="No media sources provided."
-				description="Player 'No media sources' error"
-			/>
-		</p>
 	);
 };
 

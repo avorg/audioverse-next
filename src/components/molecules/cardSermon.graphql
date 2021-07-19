@@ -1,4 +1,5 @@
 fragment cardSermon on Recording {
+	id
 	title
 	duration
 	persons {
@@ -12,4 +13,5 @@ fragment cardSermon on Recording {
 			}
 		}
 	}
+	...cardPlayable
 }

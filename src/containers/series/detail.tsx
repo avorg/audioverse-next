@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -29,27 +30,31 @@ function SeriesDetail({ data, nodes, pagination, rssUrl }: Props) {
 				rssUrl={rssUrl}
 			/>
 			<p>
-				<a href={makeSponsorRoute(languageRoute, sponsorId)}>
-					<FormattedMessage
-						id={'seriesDetail__sponsorLinkPrefix'}
-						defaultMessage={'Sponsor: {sponsorTitle}'}
-						description={'Series detail page sponsor link prefix'}
-						values={{
-							sponsorTitle: data?.series?.sponsor?.title,
-						}}
-					/>
-				</a>
+				<Link href={makeSponsorRoute(languageRoute, sponsorId)}>
+					<a>
+						<FormattedMessage
+							id={'seriesDetail__sponsorLinkPrefix'}
+							defaultMessage={'Sponsor: {sponsorTitle}'}
+							description={'Series detail page sponsor link prefix'}
+							values={{
+								sponsorTitle: data?.series?.sponsor?.title,
+							}}
+						/>
+					</a>
+				</Link>
 			</p>
 			{conferenceId && (
 				<p>
-					<a href={makeConferenceRoute(languageRoute, conferenceId)}>
-						<FormattedMessage
-							id={'seriesDetail__conferenceLinkPrefix'}
-							defaultMessage={'Conference:'}
-							description={'Series detail page conference link prefix'}
-						/>{' '}
-						{data?.series?.collection?.title}
-					</a>
+					<Link href={makeConferenceRoute(languageRoute, conferenceId)}>
+						<a>
+							<FormattedMessage
+								id={'seriesDetail__conferenceLinkPrefix'}
+								defaultMessage={'Conference:'}
+								description={'Series detail page conference link prefix'}
+							/>{' '}
+							{data?.series?.collection?.title}
+						</a>
+					</Link>
 				</p>
 			)}
 			<RecordingList recordings={nodes} />

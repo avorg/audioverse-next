@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 import withFailStates from '@components/HOCs/withFailStates';
@@ -9,7 +10,7 @@ function Sponsor({ sponsor }: Props): JSX.Element {
 	const img = sponsor?.imageWithFallback?.url;
 	return (
 		<>
-			{img && <img alt={sponsor?.title} src={img} width={100} height={100} />}
+			{img && <Image alt={sponsor?.title} src={img} width={100} height={100} />}
 			<h1>{sponsor?.title}</h1>
 			{/* TODO: Do not render these elements if nothing to display */}
 			<p>{sponsor?.summary}</p>

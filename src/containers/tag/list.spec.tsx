@@ -1,4 +1,5 @@
 import { when } from 'jest-when';
+import React from 'react';
 
 import {
 	GetTagListPageDataDocument,
@@ -17,7 +18,7 @@ async function renderPage(parameters = {}) {
 
 	const { props } = await getStaticProps({ params });
 
-	return renderWithIntl(TagList, props);
+	return renderWithIntl(<TagList {...props} />);
 }
 
 function loadPageData() {

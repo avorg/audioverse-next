@@ -9,15 +9,10 @@ query getAudiobookDetailPageData($id: ID!) {
 			nodes {
 				id
 				title
-				audioFiles {
-					url
-				}
-				audioDownloads: audioFiles(allowedContainers: MP3) {
-					url
-					filesize
-				}
 				...copyrightInfos
 				...writeFeedFile
+				...player
+				...playlist
 			}
 		}
 		shareUrl

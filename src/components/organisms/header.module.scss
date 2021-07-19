@@ -16,11 +16,16 @@
 	li {
 		list-style-type: none;
 		margin-bottom: 2rem;
+		color: rgba(0, 0, 0, 0.5);
 		display: flex;
 		align-items: center;
-		color: rgba(0, 0, 0, 0.5);
 		img {
 			margin-right: 0.25em;
+		}
+		a {
+			text-decoration: none;
+			display: flex;
+			align-items: center;
 		}
 	}
 }

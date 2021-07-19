@@ -1,6 +1,6 @@
 import { ParsedUrlQuery } from 'querystring';
 
-import { render, RenderResult } from '@testing-library/react';
+import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import * as feed from 'feed';
 import { when } from 'jest-when';
 import _ from 'lodash';
@@ -10,6 +10,7 @@ import { NextRouter } from 'next/router';
 import React, { ComponentType, ReactElement } from 'react';
 import { QueryClient, QueryClientProvider, setLogger } from 'react-query';
 import { PartialDeep } from 'type-fest';
+import videojs from 'video.js';
 
 import withIntl from '@components/HOCs/withIntl';
 import { fetchApi } from '@lib/api';
@@ -35,7 +36,14 @@ export function loadQuery(query: ParsedUrlQuery = {}): void {
 }
 
 export function loadRouter(router_: Partial<NextRouter>): void {
-	jest.spyOn(router, 'useRouter').mockReturnValue(router_ as any);
+	const val = {
+		events: {
+			on: () => undefined,
+		},
+		prefetch: async () => undefined,
+		...router_,
+	};
+	jest.spyOn(router, 'useRouter').mockReturnValue(val as any);
 }
 
 export function loadAuthGuardData(email: any = 'the_email'): void {
@@ -77,7 +85,9 @@ type RendererOptions<P> = {
 	router?: Partial<NextRouter>;
 };
 
-type Renderer<P> = (options?: RendererOptions<P>) => Promise<RenderResult>;
+type Renderer<P> = (
+	options?: RendererOptions<P>
+) => Promise<RenderResult & { queryClient: QueryClient }>;
 
 // TODO: Consider how to simplify this function. Perhaps extract a simple
 //   version and rename this function to `buildPageRenderer` or similar.
@@ -98,14 +108,16 @@ export function buildRenderer<
 		defaultParams = {},
 		defaultProps = {},
 	} = options;
-	return async (options: RendererOptions<P> = {}): Promise<RenderResult> => {
+	return async (
+		options: RendererOptions<P> = {}
+	): Promise<RenderResult & { queryClient: QueryClient }> => {
 		const { params = {}, props, router = {} } = options;
 		const fullParams = { ...defaultParams, ...params };
 		const props_ = getProps
 			? await getProps(fullParams)
 			: props || defaultProps;
 		loadRouter({ query: fullParams, ...router });
-		return renderWithIntl(Component, props_);
+		return renderWithIntl(<Component {...props_} />);
 	};
 }
 
@@ -141,22 +153,24 @@ export function buildServerRenderer<
 }
 
 // TODO: Merge with buildRenderer, or just make it private
-export async function renderWithIntl<T>(
-	Component: React.ComponentType<T>,
-	props: T
-): Promise<RenderResult> {
-	const WithIntl = withIntl(Component);
+export async function renderWithIntl(
+	ui: ReactElement,
+	renderOptions?: RenderOptions
+): Promise<RenderResult & { queryClient: QueryClient }> {
+	const WithIntl = withIntl(() => ui);
 
-	return renderWithQueryProvider(<WithIntl {...props} />);
+	return renderWithQueryProvider(<WithIntl />, renderOptions);
 }
 
 // TODO: Merge with buildRenderer, or just make it private
 export async function renderWithQueryProvider(
-	ui: ReactElement
+	ui: ReactElement,
+	renderOptions?: RenderOptions
 ): Promise<RenderResult & { queryClient: QueryClient }> {
 	const queryClient = new QueryClient();
 	const result = await render(
-		<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
+		<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
+		renderOptions
 	);
 
 	return {
@@ -205,3 +219,108 @@ export const makePlaylistButtonData = (
 
 	return _.set({} as any, 'me.user.playlists.nodes', value);
 };
+
+interface SetPlayerMockOptions {
+	isPaused?: boolean;
+	time?: number;
+	duration?: number;
+	volume?: number;
+	playbackRate?: number;
+	functions?: Partial<videojs.Player>;
+	supportsFullScreen?: boolean;
+	isFullscreen?: boolean;
+}
+
+type MockPlayer = Pick<
+	videojs.Player,
+	| 'play'
+	| 'pause'
+	| 'paused'
+	| 'currentTime'
+	| 'duration'
+	| 'src'
+	| 'volume'
+	| 'options'
+	| 'controlBar'
+	| 'playbackRate'
+	| 'requestFullscreen'
+	| 'controls'
+	| 'supportsFullScreen'
+	| 'on'
+> & {
+	_updateOptions: (options: SetPlayerMockOptions) => void;
+	_fire: (event: string, data?: any) => void;
+};
+
+export const mockVideojs = (videojs as unknown) as jest.Mock;
+
+export function setPlayerMock(options: SetPlayerMockOptions = {}): MockPlayer {
+	let {
+		isPaused = true,
+		time = 50,
+		duration = 100,
+		volume = 0.5,
+		playbackRate = 1,
+		functions = {},
+	} = options;
+	const { supportsFullScreen = true, isFullscreen = false } = options;
+
+	const handlers: Record<string, Array<(data: any) => any>> = {};
+
+	const mockPlayer: MockPlayer = {
+		_updateOptions: (options) => {
+			const update = (key: keyof SetPlayerMockOptions, fallback: any) => {
+				if (!(key in options)) return fallback;
+				if (options[key] === undefined) return fallback;
+				return options[key];
+			};
+			isPaused = update('isPaused', isPaused);
+			time = update('time', time);
+			duration = update('duration', duration);
+			functions = update('functions', functions);
+		},
+		_fire: (event: string, data: any = null) => {
+			handlers[event]?.map((fn: (data: any) => any) => fn(data));
+		},
+		play: jest.fn(async () => {
+			isPaused = false;
+		}),
+		pause: jest.fn(() => {
+			isPaused = true;
+			return (mockPlayer as unknown) as videojs.Player;
+		}),
+		paused: jest.fn(() => isPaused),
+		currentTime: jest.fn((newTime: number | null = null) => {
+			if (newTime !== null) time = newTime;
+			return time;
+		}),
+		volume: jest.fn((newVolume: number | null = null) => {
+			if (newVolume !== null) volume = newVolume;
+			return volume;
+		}) as any,
+		duration: jest.fn(() => duration),
+		src: jest.fn(),
+		options: jest.fn(),
+		controlBar: {
+			createEl: jest.fn(),
+			dispose: jest.fn(),
+		} as any,
+		playbackRate: jest.fn((newRate?: number) => {
+			if (newRate) playbackRate = newRate;
+			return playbackRate;
+		}),
+		requestFullscreen: jest.fn(),
+		controls: jest.fn(),
+		supportsFullScreen: jest.fn(() => supportsFullScreen),
+		isFullscreen: jest.fn(() => isFullscreen),
+		on: jest.fn((event: string, fn: (data: any) => any) => {
+			if (!(event in handlers)) handlers[event] = [];
+			handlers[event].push(fn);
+		}) as any,
+		...functions,
+	};
+
+	mockVideojs.mockReturnValue(mockPlayer);
+
+	return mockPlayer;
+}

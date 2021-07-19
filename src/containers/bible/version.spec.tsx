@@ -1,4 +1,5 @@
 import { when } from 'jest-when';
+import React from 'react';
 
 import {
 	GetVersionDetailPageDataDocument,
@@ -12,7 +13,7 @@ import Version, {
 
 async function renderPage() {
 	const { props } = await getStaticProps({ params: { id: 'the_version_id' } });
-	return renderWithIntl(Version, props);
+	return renderWithIntl(<Version {...props} />);
 }
 
 function loadPageData() {

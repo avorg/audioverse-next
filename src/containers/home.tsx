@@ -2,6 +2,8 @@ import { Button } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import TwitterIcon from '@material-ui/icons/Twitter';
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -33,44 +35,46 @@ export default function Home({ data }: HomeProps): JSX.Element {
 	return (
 		<div>
 			<header className={styles.header}>
-				<img src="/img/logo.svg" width={161} height={23} />
+				<Image src="/img/logo.svg" width={161} height={23} />
 				<nav className={styles.nav}>
 					<LanguageSwitcher />
-					<a
-						href={`/${route}/give`}
-						className={`${styles.button} ${styles.primary}`}
-					>
-						<FormattedMessage
-							id={'homePage__donateButtonLabel'}
-							defaultMessage={'Donate'}
-							description={'home page donate button label'}
-						/>
-					</a>
-					<a
-						href={`${route}/app`}
-						className={`${styles.button} ${styles.primary}`}
-					>
-						<FormattedMessage
-							id={'homePage__downloadAppButtonLabel'}
-							defaultMessage={'Download App'}
-							description={'home page download app button label'}
-						/>
-					</a>
+					<Link href={`/${route}/give`}>
+						<a className={`${styles.button} ${styles.primary}`}>
+							<FormattedMessage
+								id={'homePage__donateButtonLabel'}
+								defaultMessage={'Donate'}
+								description={'home page donate button label'}
+							/>
+						</a>
+					</Link>{' '}
+					<Link href={`${route}/app`}>
+						<a className={`${styles.button} ${styles.primary}`}>
+							<FormattedMessage
+								id={'homePage__downloadAppButtonLabel'}
+								defaultMessage={'Download App'}
+								description={'home page download app button label'}
+							/>
+						</a>
+					</Link>
 					<span>|</span>
-					<a href={`/${route}/account/login`}>
-						<FormattedMessage
-							id={'homePage__loginButtonLabel'}
-							defaultMessage={'Login'}
-							description={'home page login button label'}
-						/>
-					</a>
-					<a href={`/${route}/account/register`}>
-						<FormattedMessage
-							id={'srcContainersHomeTsx__signUp'}
-							defaultMessage={'Sign Up'}
-							description={'home: Sign up button label'}
-						/>
-					</a>
+					<Link href={`/${route}/account/login`}>
+						<a>
+							<FormattedMessage
+								id={'homePage__loginButtonLabel'}
+								defaultMessage={'Login'}
+								description={'home page login button label'}
+							/>
+						</a>
+					</Link>
+					<Link href={`/${route}/account/register`}>
+						<a>
+							<FormattedMessage
+								id={'srcContainersHomeTsx__signUp'}
+								defaultMessage={'Sign Up'}
+								description={'home: Sign up button label'}
+							/>
+						</a>
+					</Link>
 				</nav>
 			</header>
 			<Section
@@ -92,20 +96,19 @@ export default function Home({ data }: HomeProps): JSX.Element {
 								description={'home page sound doctrine text'}
 							/>
 						</p>
-						<a
-							href={`/${route}/account/register`}
-							className={`${styles.button} ${styles.primary}`}
-						>
-							<FormattedMessage
-								id={'homePage__joinAudioVerseButtonLabel'}
-								defaultMessage={'Join AudioVerse'}
-								description={'home page join audioverse button label'}
-							/>
-						</a>
+						<Link href={`/${route}/account/register`}>
+							<a className={`${styles.button} ${styles.primary}`}>
+								<FormattedMessage
+									id={'homePage__joinAudioVerseButtonLabel'}
+									defaultMessage={'Join AudioVerse'}
+									description={'home page join audioverse button label'}
+								/>
+							</a>
+						</Link>
 					</>
 				}
 				media={
-					<img
+					<Image
 						src={'/img/unsplash-headphones.jpg'}
 						width={4724}
 						height={3072}
@@ -133,7 +136,11 @@ export default function Home({ data }: HomeProps): JSX.Element {
 								description={'home page recent content section text'}
 								values={{
 									a: function a(chunks: string) {
-										return <a href="#">{chunks}</a>;
+										return (
+											<Link href="#">
+												<a>{chunks}</a>
+											</Link>
+										);
 									},
 								}}
 							/>
@@ -171,19 +178,18 @@ export default function Home({ data }: HomeProps): JSX.Element {
 								description={'home page download app section text'}
 							/>
 						</p>
-						<a
-							href={`${route}/app`}
-							className={`${styles.button} ${styles.primary}`}
-						>
-							<FormattedMessage
-								id={'homePage__downloadNowButtonLabel'}
-								defaultMessage={'Download Now'}
-								description={'home page download now button label'}
-							/>
-						</a>
+						<Link href={`${route}/app`}>
+							<a className={`${styles.button} ${styles.primary}`}>
+								<FormattedMessage
+									id={'homePage__downloadNowButtonLabel'}
+									defaultMessage={'Download Now'}
+									description={'home page download now button label'}
+								/>
+							</a>
+						</Link>
 					</>
 				}
-				media={<img src={'/img/players.jpeg'} width={3564} height={1724} />}
+				media={<Image src={'/img/players.jpeg'} width={3564} height={1724} />}
 				theme={'dark'}
 			/>
 			<Section
@@ -231,16 +237,15 @@ export default function Home({ data }: HomeProps): JSX.Element {
 							/>
 						</p>
 						{/* TODO: Replace with relative link when blog page added */}
-						<a
-							href="https://www.audioverse.org/english/blog"
-							className={`${styles.button} ${styles.primary}`}
-						>
-							<FormattedMessage
-								id={'homePage__recentPostsButtonLabel'}
-								defaultMessage={'View all blog posts'}
-								description={'home page recent posts button label'}
-							/>
-						</a>
+						<Link href="https://www.audioverse.org/english/blog">
+							<a className={`${styles.button} ${styles.primary}`}>
+								<FormattedMessage
+									id={'homePage__recentPostsButtonLabel'}
+									defaultMessage={'View all blog posts'}
+									description={'home page recent posts button label'}
+								/>
+							</a>
+						</Link>
 					</>
 				}
 				media={
@@ -271,13 +276,15 @@ export default function Home({ data }: HomeProps): JSX.Element {
 								description={'home page create account section text'}
 							/>
 						</p>
-						<a href="#" className={`${styles.button} ${styles.primary}`}>
-							<FormattedMessage
-								id={'homePage__createAccountSectionCTA'}
-								defaultMessage={'Sign up now'}
-								description={'home page create account section cta'}
-							/>
-						</a>
+						<Link href="#">
+							<a className={`${styles.button} ${styles.primary}`}>
+								<FormattedMessage
+									id={'homePage__createAccountSectionCTA'}
+									defaultMessage={'Sign up now'}
+									description={'home page create account section cta'}
+								/>
+							</a>
+						</Link>
 					</>
 				}
 				media={
@@ -326,13 +333,15 @@ export default function Home({ data }: HomeProps): JSX.Element {
 								description={'home page support section text'}
 							/>
 						</p>
-						<a href="#" className={`${styles.button} ${styles.primary}`}>
-							<FormattedMessage
-								id={'homePage__supportSectionCTA'}
-								defaultMessage={'Make a donation'}
-								description={'home page support section cta'}
-							/>
-						</a>
+						<Link href="#">
+							<a className={`${styles.button} ${styles.primary}`}>
+								<FormattedMessage
+									id={'homePage__supportSectionCTA'}
+									defaultMessage={'Make a donation'}
+									description={'home page support section cta'}
+								/>
+							</a>
+						</Link>
 					</>
 				}
 				media={
@@ -386,11 +395,11 @@ export default function Home({ data }: HomeProps): JSX.Element {
 				}
 				media={
 					// TODO: Replace with subscription widget
-					<img src={'/img/unsplash-notes.jpg'} width={5472} height={3648} />
+					<Image src={'/img/unsplash-notes.jpg'} width={5472} height={3648} />
 				}
 			/>
 			<div className={styles.footer}>
-				<img src="/img/logo.svg" width={161} height={23} />
+				<Image src="/img/logo.svg" width={161} height={23} />
 				<div className={styles.footerLinks}>
 					<div>
 						<h5>
@@ -402,46 +411,40 @@ export default function Home({ data }: HomeProps): JSX.Element {
 						</h5>
 						<ul>
 							<li>
-								<a
-									href="https://www.facebook.com/AudioVerse"
-									target={'_blank'}
-									rel={'noreferrer noopener'}
-								>
-									<FacebookIcon fontSize={'small'} />
-									<FormattedMessage
-										id={'homePage__footerFacebookLink'}
-										defaultMessage={'Facebook'}
-										description={'home page footer facebook link'}
-									/>
-								</a>
+								<Link href="https://www.facebook.com/AudioVerse">
+									<a target={'_blank'} rel={'noreferrer noopener'}>
+										<FacebookIcon fontSize={'small'} />
+										<FormattedMessage
+											id={'homePage__footerFacebookLink'}
+											defaultMessage={'Facebook'}
+											description={'home page footer facebook link'}
+										/>
+									</a>
+								</Link>
 							</li>
 							<li>
-								<a
-									href="https://www.instagram.com/audioverse/"
-									target={'_blank'}
-									rel={'noreferrer noopener'}
-								>
-									<InstagramIcon fontSize={'small'} />
-									<FormattedMessage
-										id={'homePage__footerInstagramLink'}
-										defaultMessage={'Instagram'}
-										description={'home page footer instagram link'}
-									/>
-								</a>
+								<Link href="https://www.instagram.com/audioverse/">
+									<a target={'_blank'} rel={'noreferrer noopener'}>
+										<InstagramIcon fontSize={'small'} />
+										<FormattedMessage
+											id={'homePage__footerInstagramLink'}
+											defaultMessage={'Instagram'}
+											description={'home page footer instagram link'}
+										/>
+									</a>
+								</Link>
 							</li>
 							<li>
-								<a
-									href="https://twitter.com/audioverse"
-									target={'_blank'}
-									rel={'noreferrer noopener'}
-								>
-									<TwitterIcon fontSize={'small'} />
-									<FormattedMessage
-										id={'homePage__footerTwitterLink'}
-										defaultMessage={'Twitter'}
-										description={'home page footer twitter link'}
-									/>
-								</a>
+								<Link href="https://twitter.com/audioverse">
+									<a target={'_blank'} rel={'noreferrer noopener'}>
+										<TwitterIcon fontSize={'small'} />
+										<FormattedMessage
+											id={'homePage__footerTwitterLink'}
+											defaultMessage={'Twitter'}
+											description={'home page footer twitter link'}
+										/>
+									</a>
+								</Link>
 							</li>
 						</ul>
 					</div>
@@ -455,37 +458,41 @@ export default function Home({ data }: HomeProps): JSX.Element {
 						</h5>
 						<ul>
 							<li>
-								<a href={`${route}/app`}>
-									<FormattedMessage
-										id={'homePage__footerDownloadAppButton'}
-										defaultMessage={'Download app'}
-										description={'home page footer download app button'}
-									/>
-								</a>
+								<Link href={`${route}/app`}>
+									<a>
+										<FormattedMessage
+											id={'homePage__footerDownloadAppButton'}
+											defaultMessage={'Download app'}
+											description={'home page footer download app button'}
+										/>
+									</a>
+								</Link>
 							</li>
 							<li>
-								<a
+								<Link
 									href={
 										'https://audioverse.z2systems.com/np/clients/audioverse/subscribe.jsp?subscription=5'
 									}
-									target={'_blank'}
-									rel={'noreferrer noopener'}
 								>
-									<FormattedMessage
-										id={'homePage__footerNewsletterSignup'}
-										defaultMessage={'Sign up for newsletter'}
-										description={'homePage__footerNewsletterSignup'}
-									/>
-								</a>
+									<a target={'_blank'} rel={'noreferrer noopener'}>
+										<FormattedMessage
+											id={'homePage__footerNewsletterSignup'}
+											defaultMessage={'Sign up for newsletter'}
+											description={'homePage__footerNewsletterSignup'}
+										/>
+									</a>
+								</Link>
 							</li>
 							<li>
-								<a href={`/${route}/give`}>
-									<FormattedMessage
-										id={'homePage__footerDonateLink'}
-										defaultMessage={'Donate'}
-										description={'home page footer donate link'}
-									/>
-								</a>
+								<Link href={`/${route}/give`}>
+									<a>
+										<FormattedMessage
+											id={'homePage__footerDonateLink'}
+											defaultMessage={'Donate'}
+											description={'home page footer donate link'}
+										/>
+									</a>
+								</Link>
 							</li>
 						</ul>
 					</div>

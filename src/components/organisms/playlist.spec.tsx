@@ -7,14 +7,15 @@ import { renderWithIntl } from '@lib/test/helpers';
 const renderProp = jest.fn();
 
 async function renderComponent(props = {}) {
-	return renderWithIntl(Playlist, {
+	const _p = {
 		recordings: [
 			{ id: 'first', title: 'first' },
 			{ id: 'second', title: 'second' },
 		] as any,
 		children: renderProp,
 		...props,
-	});
+	};
+	return renderWithIntl(<Playlist {..._p} />);
 }
 
 describe('playlist component', () => {

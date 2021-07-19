@@ -1,6 +1,8 @@
+import Link from 'next/link';
 import React from 'react';
 
 import { Header } from './Header';
+
 import './page.css';
 
 export interface PageProps {
@@ -54,21 +56,13 @@ export const Page: React.FC<PageProps> = ({
 			</ul>
 			<p>
 				Get a guided tutorial on component-driven development at{' '}
-				<a
-					href="https://storybook.js.org/tutorials/"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Storybook tutorials
-				</a>
+				<Link href="https://storybook.js.org/tutorials/">
+					<a>Storybook tutorials</a>
+				</Link>
 				. Read more in the{' '}
-				<a
-					href="https://storybook.js.org/docs"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					docs
-				</a>
+				<Link href="https://storybook.js.org/docs">
+					<a>docs</a>
+				</Link>
 				.
 			</p>
 			<div className="tip-wrapper">

@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -20,13 +21,15 @@ export default function RssLink({
 							title={'RSS feed'}
 						/>
 					</Head>
-					<a href={href} target={'_blank'} rel={'noreferrer noopener'}>
-						<FormattedMessage
-							id="rssLink__label"
-							defaultMessage="RSS"
-							description="RSS link label"
-						/>
-					</a>
+					<Link href={href}>
+						<a target={'_blank'} rel={'noreferrer noopener'}>
+							<FormattedMessage
+								id="rssLink__label"
+								defaultMessage="RSS"
+								description="RSS link label"
+							/>
+						</a>
+					</Link>
 				</>
 			)}
 		</>

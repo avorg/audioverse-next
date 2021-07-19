@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 import Section from '@components/organisms/section';
@@ -13,13 +15,13 @@ export const DarkBleed = (): JSX.Element => (
 					Be challenged and inspired to grow in your relationship with Jesus
 					through songs, sermons, audiobooks, and Bible readings.
 				</p>
-				<a href="#" className={styles.button}>
-					Join AudioVerse
-				</a>
+				<Link href="#">
+					<a className={styles.button}>Join AudioVerse</a>
+				</Link>
 			</>
 		}
 		media={
-			<img src={'/img/unsplash-headphones.jpg'} width={4724} height={3072} />
+			<Image src={'/img/unsplash-headphones.jpg'} width={4724} height={3072} />
 		}
 		theme={'dark'}
 	/>

@@ -1,9 +1,13 @@
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import withFailStates from '@components/HOCs/withFailStates';
 import Player from '@components/molecules/player';
-import { GetBibleBookDetailPageDataQuery } from '@lib/generated/graphql';
+import {
+	GetBibleBookDetailPageDataQuery,
+	PlayerFragment,
+} from '@lib/generated/graphql';
 
 import styles from './book.module.scss';
 
@@ -17,11 +21,22 @@ function Book({ data }: BookProps): JSX.Element {
 	const chapter = chapters.find((c) => c.id === chapterId);
 	const verses = chapter?.verses || [];
 
+	// TODO: Remove this transformation when the API returns Recording type
+	const recording: Partial<PlayerFragment> = {
+		audioFiles: [
+			{
+				url: chapter?.url,
+				mimeType: 'audio/mpeg',
+				filesize: 'unknown',
+			},
+		],
+	};
+
 	return (
 		<>
 			<h1>{data.audiobible?.book.title}</h1>
 			<h2>{data.audiobible?.title}</h2>
-			{chapter?.url && <Player sources={[{ src: chapter?.url }]} />}
+			{chapter?.url && <Player recording={recording as PlayerFragment} />}
 			<label>
 				<FormattedMessage
 					id="bibleBook__chapterSelectLabel"
@@ -64,14 +79,16 @@ function Book({ data }: BookProps): JSX.Element {
 					description="Bible book detail page downloads tab title"
 				/>
 			</h3>
-			<a href={chapter?.url}>
-				<FormattedMessage
-					id="bibleBook__mp3Label"
-					defaultMessage="mp3:"
-					description="Bible book detail page mp3 download link label"
-				/>{' '}
-				{chapter?.title}
-			</a>
+			<Link href={chapter?.url}>
+				<a>
+					<FormattedMessage
+						id="bibleBook__mp3Label"
+						defaultMessage="mp3:"
+						description="Bible book detail page mp3 download link label"
+					/>{' '}
+					{chapter?.title}
+				</a>
+			</Link>
 			<h3>
 				<FormattedMessage
 					id="bibleBook__tabTranscript"

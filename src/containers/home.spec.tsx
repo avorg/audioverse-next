@@ -299,7 +299,10 @@ describe('home page', () => {
 	it('links post title', async () => {
 		const { getByText } = await renderPage();
 
-		expect(getByText('the_post_title')).toHaveAttribute('href', 'the_post_url');
+		expect(getByText('the_post_title')).toHaveAttribute(
+			'href',
+			'/the_post_url'
+		);
 	});
 });
 

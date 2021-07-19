@@ -31,7 +31,7 @@ describe('card post', () => {
 
 		expect(getByAltText('the_title').parentElement).toHaveAttribute(
 			'href',
-			'the_url'
+			'/the_url'
 		);
 	});
 });

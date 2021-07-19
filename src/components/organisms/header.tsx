@@ -1,4 +1,6 @@
 import { Button } from '@material-ui/core';
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -17,9 +19,16 @@ const Header = (): JSX.Element => {
 	return (
 		<header className={styles.header}>
 			<h1 className={styles.logo}>
-				<a href={`/${languageRoute}`}>
-					<img src="/img/logo.svg" alt="AudioVerse" width={161} height={23} />
-				</a>
+				<Link href={`/${languageRoute}`}>
+					<a>
+						<Image
+							src="/img/logo.svg"
+							alt="AudioVerse"
+							width={161}
+							height={23}
+						/>
+					</a>
+				</Link>
 			</h1>
 			<ul>
 				<li>
@@ -31,20 +40,28 @@ const Header = (): JSX.Element => {
 					/>
 				</li>
 				<li>
-					<Icon icon={'search'} size={iconSize} />{' '}
-					<FormattedMessage
-						id={`header__navItemDiscover`}
-						defaultMessage="Discover"
-						description={`Header nav link name: Discover`}
-					/>
+					<Link href={`/${languageRoute}/discover`}>
+						<a>
+							<Icon icon={'search'} size={iconSize} />{' '}
+							<FormattedMessage
+								id={`header__navItemDiscover`}
+								defaultMessage="Discover"
+								description={`Header nav link name: Discover`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
-					<Icon icon={'bible'} size={iconSize} />{' '}
-					<FormattedMessage
-						id={`header__naveItemBible`}
-						defaultMessage="Bible"
-						description={`Header nav link name: Bible`}
-					/>
+					<Link href={`/${languageRoute}/bibles`}>
+						<a>
+							<Icon icon={'bible'} size={iconSize} />{' '}
+							<FormattedMessage
+								id={`header__naveItemBible`}
+								defaultMessage="Bible"
+								description={`Header nav link name: Bible`}
+							/>
+						</a>
+					</Link>
 				</li>
 				<li>
 					<Icon icon={'collections'} size={iconSize} />{' '}
@@ -90,7 +107,7 @@ const Header = (): JSX.Element => {
 			</ul>
 			<div className={styles.user}>
 				{/* TODO: Make dynamic; hide when user not logged in */}
-				<img src="/img/ivan.png" width={16} height={16} />{' '}
+				<Image src="/img/ivan.png" width={16} height={16} />{' '}
 				<FormattedMessage
 					id={`header__userNamePlaceholder`}
 					defaultMessage="User Name"

@@ -11,10 +11,8 @@ import {
 import { mockedFetchApi, renderWithIntl } from '@lib/test/helpers';
 
 function render() {
-	return renderWithIntl(
-		withAuthGuard(() => <>hello world</>),
-		{}
-	);
+	const Comp = withAuthGuard(() => <>hello world</>);
+	return renderWithIntl(<Comp />);
 }
 
 describe('withAuthGuard', () => {
